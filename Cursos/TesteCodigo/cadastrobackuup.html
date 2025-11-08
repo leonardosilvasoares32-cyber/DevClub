@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Cadastro de Produtos</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Cadastro de Produtos</h1>
+    
+    <div class="btn-container">
+        <a href="index.html" class="btn-voltar-link">
+            <button class="btn-voltar">Voltar para Vendas</button>
+        </a>
+    </div>
+
+    <form id="formProduto">
+        <div class="form-grupo">
+            <label for="novoProduto">Nome do Produto:</label>
+            <input type="text" id="novoProduto" required>
+        </div>
+        <div class="form-grupo">
+            <label for="novaCaixaMaster">Caixa Master:</label>
+            <input type="number" id="novaCaixaMaster" required min="1">
+        </div>
+        <div class="form-grupo">
+            <label for="novoPrecoAtacado">Preço Atacado (R$):</label>
+            <input type="number" id="novoPrecoAtacado" required min="0.01">
+        </div>
+        <div class="form-grupo">
+            <label for="novoPrecoVarejo">Preço Varejo (R$):</label>
+            <input type="number" id="novoPrecoVarejo" required min="0.01">
+        </div>
+        <button type="button" class="btn-cadastro" onclick="cadastrarProduto()">Cadastrar Produto</button>
+    </form>
+    
+    <div class="data-actions">
+        <button onclick="exportarProdutos()">Exportar Produtos</button>
+        <label for="importarProdutosInput" class="btn-importar">Importar Produtos</label>
+        <input type="file" id="importarProdutosInput" style="display: none;" onchange="importarProdutos(event)">
+    </div>
+
+    <h2>Produtos Cadastrados</h2>
+    <table id="cadastroProdutos">
+        <thead>
+            <tr>
+                <th>Produto</th>
+                <th>Caixa Master</th>
+                <th>Preço Atacado</th>
+                <th>Preço Varejo</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            </tbody>
+    </table>
+
+    <script src="script.js"></script>
+</body>
+</html>

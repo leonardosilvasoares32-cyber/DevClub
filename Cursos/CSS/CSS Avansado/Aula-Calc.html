@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        <h1>CSS Calc</h1>
+        <div style="width: calc(50% - 50px); height: calc(50vh - 100px); background-color: lightblue;">
+            Este div usa calc() para ajustar su tamanho, no html.
+        </div>
+
+    </div>
+    <br>
+    <div>
+        <h1>CSS Variables</h1>
+        <style>
+            :root {
+                --main-color: coral;
+                --padding: 20px;
+            }
+            .variable-example {
+                background-color: var(--main-color);
+                padding: var(--padding);
+                color: white;
+            }
+        </style>
+        <div class="variable-example">
+            Este div usa variables CSS para su estilo.
+    </div>
+    <div>
+        <h2>Modificando Variables</h2>
+        <style>
+            .modified-variable-example {
+                --main-color: rgb(39, 2, 247); /* Modificando la variable para este div */
+                background-color: var(--main-color);
+                padding: var(--padding);
+                color: rgb(253, 253, 253);
+            }
+        </style>
+        <div class="modified-variable-example">
+            Este div tiene una variable modificada.
+        </div>
+    </div>
+    
+</body>
+</html>

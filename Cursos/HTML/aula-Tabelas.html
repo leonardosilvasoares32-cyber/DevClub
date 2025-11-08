@@ -1,0 +1,81 @@
+<!--TABELAS
+
+A tag <table> é usada para criar tabelas em HTML. Dentro dela, usamos outras tags 
+    para definir linhas e células. a baixo estão as principais tags usadas em tabelas:
+    ESSE CAMPOS SAO UTILIZADO DENTRO DA TAG <TABLE>
+border: define a borda da tabela
+borderwidth: define a largura da borda
+bordercolor: define a cor da borda
+cellpadding: define o espaçamento interno das células
+cellspacing: define o espaçamento entre as células
+colspan: mescla células na horizontal
+rowspan: mescla células na vertical 
+thead: define o cabeçalho da tabela
+tbody: define o corpo da tabela
+tfoot: define o rodapé da tabela
+
+ESSES CAMPOS SAO UTILIZADO DENTRO DA TAG <TR> PARA DEFINIR AS CELULAS DA TABELA
+<tr>, <th> e <td>:
+<tr>: define uma linha na tabela
+<th>: define uma célula de cabeçalho (geralmente em negrito e centralizada)
+<td>: define uma célula de dados (conteúdo normal da tabela)
+
+Exemplo de tabela simples:
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exemplo de Tabela</title>
+</head>
+<body>
+    <h1>Exemplo de Tabela</h1>  
+    <table border="1" cellpadding="10">
+        <tr>
+            <th>Nome</th>
+            <th>Idade</th>
+            <th>Cidade</th>
+        </tr>
+        <tr>
+            <td>Ana</td>
+            <td>25</td>
+            <td>São Paulo</td>
+        </tr>
+        <tr>
+            <td>Bruno</td>
+            <td>30</td>
+            <td>Rio de Janeiro</td>
+        </tr>
+        <tr>
+            <td>Carla</td>
+            <td>28</td>
+            <td>Belo Horizonte</td>
+        </tr>
+    </table>
+</body>
+</html>
+
+
+-->
+<table border="1" cellpadding="10" bordercolor="blue">
+    <tr> <!--COLUNA DA TABELA-->
+        <th>Nome</th><!--CABEÇALHO DA TABELA-->
+        <th>Idade</th>
+        <th>Cidade</th>
+    </tr>
+    <tr>
+        <td>Ana</td><!--DADOS OU ITENS DA TABELA-->
+        <td>25</td>
+        <td>São Paulo</td>
+    </tr>
+    <tr>
+        <td>Bruno</td>
+        <td>30</td>
+        <td>Rio de Janeiro</td>
+    </tr>
+    <tr>
+        <td>Carla</td>
+        <td>28</td>
+        <td>Belo Horizonte</td>
+    </tr>
+</table>

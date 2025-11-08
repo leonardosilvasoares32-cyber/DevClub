@@ -1,0 +1,70 @@
+/* 
+principais valores de position:
+............. - static (padrão) - nao altera a posiçao do elemento
+
+............. - fixed - fixa  o elemente na tela (viewport), onde nos escolhermos ele fica la, no fixed é como se o elemento flutuasse para frente, assim 
+abrindo espaço para os outros elementos ficarem por trás dele
+
+............. - sticky - age como um adesivo, fica o elemento so onde eu determinar
+
+............. - relative - altera a posiçao do elemento em relaçao a sua posiçao original
+
+............. - absolute - posição absoluta(fica) a um elemento ou pagina
+.....................................- Se nao tiver pa / pai for static -> Posiciona em relaçao a pagina
+.....................................- Se o pai nao for static -> Posiciona referente ao pai
+
+*/
+
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    height: 200vh;
+    width: 200vw;
+
+}
+
+.div-dad{
+    background-color: #ff1396;
+    height: 350px;
+    width: 350px;
+    position: static;
+    margin-top: 100px;
+    opacity: 0,50;
+    
+}
+.div-son{
+    background-color: #13ffea;
+    height: 150px;
+    width: 150px;
+    position: fixed; /* a caracteristica do fixed, como se o elemennto flutuasse para frente, assim abrindo espaco para os outros elementos
+        ficarem por traz dele*/
+    top: 10px;
+    left: 500px;
+    opacity: 0,5;
+    
+}
+
+.div-123{
+    background-color: #ff6a13;
+    height: 350px;
+    width: 350px;
+    position: sticky;
+    left: 200px;
+    opacity: 0.5 ;
+}
+.div-456{
+      background-color: #2911fca4;
+    height: 350px;
+    width: 350px;
+    position: relative
+    
+}
+.div-789{
+     background-color: #b3f00b;
+    height: 350px;
+    width: 350px;
+    position: absolute
+    
+}

@@ -1,0 +1,35 @@
+
+/* *{} siguinfica todos os elementos da página terao esse estilo definico
+   .box{} significa que todos os elementos com a classe box terao esse estilo definido
+   #box{} significa que o elemento com o id box tera esse estilo definido
+Box Sizing - Define como a largura e altura totais de um elemento são calculadas.
+*/
+*{
+    box-sizing: border-box ;   
+    /*content-box = a altura (height) e largura (width) aplica-se somente no objeto (box) e o passing e a borda (border) somam no tamanho 
+    do objeto, assim insidindo no tamanho final 
+    border-box = a altura (height) e largura (width) aplica-se no objeto (box) + o passing + a borda (border), assim o tamanho final
+    do objeto (box) não é alterado
+    */
+    
+}
+
+
+.box{
+    width: 100px; 
+    height: 100px;
+    background-color: lightblue;
+    padding: 20px;
+    border: 10px double blue;
+    /*tipos de bordas: 
+    border: 10px solid = padrão
+    border: 10px dotted  = pontilhada
+    border: 10px dashed = tracejada
+    border: 10px double = dupla
+    border: 10px groove = entalhada
+    border: 10px ridge = relevo
+    border: 10px inset = inserida
+    border: 10px outset = saliente
+    */
+
+}

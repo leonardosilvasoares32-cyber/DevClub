@@ -1,0 +1,73 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: 0;
+}
+div{
+    margin-left: 20px;
+}
+#title{
+    margin-left: 30px;
+    margin-top: 20px;
+}
+/* 
+    ESSAS SAO AS QUE JA UTILIZEI
+
+*/
+li:first-child{
+    color: red;
+/*
+        :first-child - quando o elemento é o primeiro filho do seu pai
+
+*/
+}
+
+
+span:first-of-type{
+    color: blue;
+    font-size: 20px;
+ /* 
+    :first-of-type - quando o elemento é o primeiro do seu tipo entre os irmãos
+
+*/
+}
+p:first-of-type{
+    color: rgb(255, 0, 234);
+}
+
+#div2:last-child{
+    color: chartreuse;
+/* 
+ :last-child - quando o elemento é o último filho do seu pai
+*/
+}
+#p:last-of-type{
+    color: chocolate;
+}
+#container :not(a){
+    color: crimson;
+
+/*
+        :not(selector) - quando o elemento não corresponde ao seletor
+*/
+}
+
+li:nth-child(2){
+    color: indigo;
+    font-size: 20px;
+/*
+        :nth-of-type(n) - vai estilizar somente a linha que vo escolher entre os irmãos
+
+*/
+}
+
+li:nth-last-child(3){
+    font-size: 40px;
+    color: green;
+
+    /*
+        :nth-of-type(n) - vai estilizar somente a linha que vo escolher entre os irmãos,
+        so que conta de traz para frente
+
+*/
+}

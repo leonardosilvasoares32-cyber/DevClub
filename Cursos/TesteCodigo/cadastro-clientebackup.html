@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Cadastro de Clientes</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Cadastro de Clientes</h1>
+    
+    <form id="formCliente">
+        <div class="form-grupo">
+            <label for="razaoSocial">Razão Social:</label>
+            <input type="text" id="razaoSocial" required>
+        </div>
+        <div class="form-grupo">
+            <label for="nomeFantasia">Nome Fantasia:</label>
+            <input type="text" id="nomeFantasia">
+        </div>
+        <div class="form-grupo">
+            <label for="cnpj">CNPJ:</label>
+            <input type="text" id="cnpj" required>
+        </div>
+        <div class="form-grupo">
+            <label for="telefone">Telefone:</label>
+            <input type="tel" id="telefone" required>
+        </div>
+        <div class="form-grupo">
+            <label for="comprador">Comprador:</label>
+            <input type="text" id="comprador" required>
+        </div>
+        <div class="form-grupo">
+            <label for="email">Email:</label>
+            <input type="email" id="email" required>
+        </div>
+        <div class="form-grupo">
+            <label for="vendedor">Vendedor:</label>
+            <input type="text" id="vendedor" required>
+        </div>
+        
+        <button type="submit">Salvar Cliente</button>
+        <a href="index.html" class="btn-voltar-link">
+            <button type="button" class="btn-voltar">Voltar para Vendas</button>
+        </a>
+    </form>
+    
+    <h2>Clientes Cadastrados</h2>
+    <table id="tabelaClientes">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Razão Social</th>
+                <th>Nome Fantasia</th>
+                <th>CNPJ</th>
+                <th>Telefone</th>
+                <th>Comprador</th>
+                <th>Email</th>
+                <th>Vendedor</th>
+            </tr>
+        </thead>
+        <tbody>
+            </tbody>
+    </table>
+
+    <div class="data-actions">
+        <button class="btn-importar" onclick="exportarClientes()">Exportar Clientes</button>
+        <label class="btn-importar">
+            Importar Clientes
+            <input type="file" id="importClientesInput" onchange="importarClientes(event)" style="display:none;">
+        </label>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,30 @@
+/*
+Tipos de Display; block, inline, inline-block, none
+- block: Elementos do tipo bloco, iniciam em uma nova linha e ocupam toda a largura disponível, 
+nao deixando nada na linha onde ele estiver. 
+    Ex: <div>, <h1> a <h6>, <p>, <form>, <header>, <footer>, <section>, <article>.
+- inline: Elementos do tipo inline, não iniciam em uma nova linha e ocupam apenas a largura necessária. 
+    Ex: <span>, <a>, <strong>, <em>, <img>.
+- inline-block: Combina características de block e inline. Permite definir largura e altura, mas não inicia em uma nova linha. 
+    Ex: <button>, <input>, <label>.
+- none: Oculta o elemento, removendo-o do fluxo do documento.
+     Ex: qualquer elemento pode ter display: none.
+
+*/
+
+.box{
+    background: blueviolet;
+    height: 50px;
+    width: 50px;
+    margin: 20px;
+    display: inline-block;
+}
+
+.box1{
+    background: orange;
+    
+}
+
+.box2{
+background: red;
+}

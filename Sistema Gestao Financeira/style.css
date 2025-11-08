@@ -1,0 +1,311 @@
+/*
+ * style.css V31.2 - REVISÃO FINAL: LAYOUT, FONTES MAIORES E ALTO CONTRASTE
+ */
+
+/* ==================================== */
+/* VARIÁVEIS DE COR E ESTILOS GERAIS */
+/* ==================================== */
+:root {
+    /* Cores do Tema Escuro */
+    --cor-fundo-principal: #1f1f1f; 
+    --cor-fundo-secundario: #2c2c2c; 
+    --cor-fundo-card-escuro: #3c3c3c;
+    --cor-texto-principal: #ffffff;
+    --cor-texto-secundario: #cccccc;
+    --cor-borda-clara: #444444; 
+    
+    /* Cores de Ação */
+    --cor-primaria: #007bff; 
+    --cor-sucesso: #28a745; 
+    --cor-perigo: #dc3545; 
+    --cor-alerta: #ffc107; 
+
+    /* Cores de Status para Legenda e Cards (Alto Contraste) */
+    --status-vencido: #e84a5f;      /* Vermelho Forte */
+    --status-alerta: #ff8c00;       /* Laranja Escuro */
+    --status-proximo: #1e90ff;      /* Azul Forte */
+    --status-confirmado: #00bfa5;   /* Verde Ciano (Paga/Confirmada) */
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--cor-fundo-principal);
+    color: var(--cor-texto-principal);
+    line-height: 1.65; /* Leve aumento no espaçamento de linha */
+    font-size: 17px; /* Aumento da fonte base */
+}
+
+header {
+    background-color: var(--cor-primaria);
+    color: var(--cor-texto-principal);
+    padding: 20px 25px; /* Aumento do padding */
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+main {
+    max-width: 1200px;
+    margin: 30px auto; /* Aumento da margem */
+    padding: 30px;
+    background-color: var(--cor-fundo-secundario);
+    border-radius: 12px;
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.6);
+}
+
+h2 {
+    color: var(--cor-primaria);
+    border-bottom: 2px solid var(--cor-borda-clara);
+    padding-bottom: 12px;
+    margin-bottom: 30px;
+    font-size: 1.8em; /* Aumento do título */
+}
+
+/* ==================================== */
+/* ABAS */
+/* ==================================== */
+.tabs {
+    display: flex;
+    margin-bottom: 25px;
+    border-bottom: 1px solid var(--cor-borda-clara);
+}
+
+.tab-button {
+    background-color: var(--cor-fundo-secundario);
+    color: var(--cor-texto-principal);
+    border: 1px solid var(--cor-borda-clara);
+    border-bottom: none;
+    padding: 12px 20px;
+    cursor: pointer;
+    font-size: 17px; /* Fonte ajustada */
+    border-radius: 8px 8px 0 0;
+    margin-right: 5px;
+}
+
+.tab-button.ativa {
+    background-color: var(--cor-primaria);
+    color: var(--cor-texto-principal);
+    border-color: var(--cor-primaria);
+    font-weight: bold;
+}
+
+.aba-conteudo.oculto {
+    display: none;
+}
+
+
+/* ==================================== */
+/* ESTILO DE BOTÕES (Manutenção de Tamanho e Cores) */
+/* ==================================== */
+
+.btn-editar, .btn-remover, .btn-confirmar {
+    padding: 8px 14px; /* Leve aumento */
+    font-size: 14px; 
+}
+
+
+/* ==================================== */
+/* FORMULÁRIOS E INPUTS (Dark Mode) - NOVO REGISTRO CORRIGIDO */
+/* ==================================== */
+#formNovoLancamento, #formEdicaoLancamento {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Min-width um pouco maior */
+    gap: 25px; /* Aumento do espaçamento */
+    padding-bottom: 25px;
+    border-bottom: 1px solid var(--cor-borda-clara);
+}
+
+.form-group label {
+    font-weight: bold;
+    margin-bottom: 8px; /* Aumento do espaçamento */
+    color: var(--cor-texto-principal); 
+    font-size: 1.05em; /* Aumento da fonte do Label */
+}
+
+.form-group input, 
+.form-group select {
+    padding: 12px; /* Aumento do padding interno (tamanho visual) */
+    font-size: 17px; /* Fonte do input base */
+    background-color: #333333; 
+    color: var(--cor-texto-principal);
+}
+
+/* CORREÇÃO DO NOVO REGISTRO: Botão de submit alinhado */
+#formNovoLancamento button[type="submit"], 
+#formEdicaoLancamento button[type="submit"] {
+    align-self: center; /* Centraliza verticalmente o botão na linha do grid */
+    grid-column: span 1;
+    margin-top: 20px; /* Maior espaçamento em cima */
+}
+
+
+/* ==================================== */
+/* FILTROS (Geral) - LAYOUT E FONTES MAIORES */
+/* ==================================== */
+.filtro-container {
+    gap: 25px; /* Aumento do gap */
+    padding: 20px;
+    border: 1px solid var(--cor-borda-clara);
+    border-radius: 10px;
+    background-color: var(--cor-fundo-card-escuro); 
+}
+
+.filtro-item label {
+    font-weight: bold;
+    margin-bottom: 8px; /* Aumento do espaçamento */
+    color: var(--cor-texto-principal);
+    font-size: 1.05em; /* Aumento da fonte do Label */
+}
+
+.filtro-item input,
+.filtro-item select {
+    padding: 10px; /* Aumento do padding interno (tamanho visual) */
+    font-size: 16px; 
+    background-color: #444444; 
+    color: var(--cor-texto-principal);
+}
+
+.botoes-filtro button {
+    padding: 12px 18px; /* Botões de filtro maiores */
+    font-size: 15px;
+}
+
+
+/* ==================================== */
+/* DASHBOARD E GRÁFICOS - CORREÇÃO DE LAYOUT */
+/* ==================================== */
+
+.card {
+    padding: 25px; /* Mais padding para os cards */
+    min-width: 280px;
+}
+
+.card h3 {
+    font-size: 19px; /* Aumento da fonte do título do card */
+}
+
+.card p {
+    font-size: 34px; /* Aumento da fonte do valor do card */
+}
+
+/* CORREÇÃO DE LAYOUT DO GRÁFICO (Dashboard e Relatório) */
+.grafico-container {
+    height: 450px; /* Aumento da altura */
+    margin-bottom: 30px;
+    padding: 20px;
+    background-color: var(--cor-fundo-card-escuro);
+    border: 1px solid var(--cor-borda-clara);
+    border-radius: 10px;
+    /* Adicionando overflow: hidden para garantir que o conteúdo não vaze */
+    overflow: hidden; 
+}
+
+
+/* ==================================== */
+/* TABELA DE DADOS */
+/* ==================================== */
+.tabela-dados th, .tabela-dados td {
+    padding: 15px 18px; /* Aumento do padding para células maiores */
+    font-size: 16px; /* Fonte ajustada */
+}
+
+.tabela-dados th {
+    font-size: 17px; /* Fonte maior para o cabeçalho */
+}
+
+
+/* ==================================== */
+/* CONTAS PENDENTES (CARDS) - LAYOUT E LEGENDA */
+/* ==================================== */
+
+.pendentes-cards-container {
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); /* Cards levemente maiores */
+    gap: 25px;
+}
+
+.pendente-card {
+    padding: 22px;
+}
+
+.pendente-valor {
+    font-size: 1.8em; /* Aumento do valor no card */
+    font-weight: bold;
+}
+
+.pendente-descricao {
+    font-size: 1.3em; /* Aumento da descrição */
+    font-weight: 600;
+}
+
+/* NOVA SEÇÃO: LEGENDA DE STATUS E AÇÕES */
+.pendentes-legenda {
+    margin-top: 30px;
+    padding: 20px;
+    border: 1px solid var(--cor-borda-clara);
+    border-radius: 10px;
+    background-color: #333333; /* Fundo levemente mais claro para destaque */
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px 30px; /* Espaçamento entre os itens */
+    font-size: 15px;
+}
+
+.legenda-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--cor-texto-principal);
+}
+
+.legenda-cor {
+    width: 15px;
+    height: 15px;
+    border-radius: 3px;
+    display: inline-block;
+}
+
+/* Cores de Status */
+.legenda-cor.vencida { background-color: var(--status-vencido); }
+.legenda-cor.vencendo { background-color: var(--status-alerta); }
+.legenda-cor.a-vencer { background-color: var(--status-proximo); }
+
+/* Cores de Ação */
+.legenda-cor.confirmada { background-color: var(--status-confirmado); }
+.legenda-cor.remover { background-color: var(--cor-perigo); }
+.legenda-cor.editar { background-color: var(--cor-alerta); }
+
+
+/* Ajuste nas cores dos cards (para usar as variáveis de status) */
+.pendente-card.vencido {
+    background-color: #4a1f26; /* Versão escura do status-vencido */
+    border: 3px solid var(--status-vencido);
+    color: #fff0f0; 
+}
+.pendente-card.vencido .pendente-valor { color: #fff0f0; }
+.pendente-card.vencido .pendente-meta span { color: #fff0f0; }
+
+
+.pendente-card.alerta-vencimento {
+    background-color: #553300; /* Versão escura do status-alerta */
+    border: 3px solid var(--status-alerta);
+    color: #ffda80; 
+}
+.pendente-card.alerta-vencimento .pendente-valor { color: #ffda80; }
+.pendente-card.alerta-vencimento .pendente-meta span { color: #ffda80; }
+
+.pendente-card.proximo-vencimento {
+    background-color: #173840; 
+    border: 3px solid var(--status-proximo);
+    color: #b3e0ff; 
+}
+.pendente-card.proximo-vencimento .pendente-valor { color: #b3e0ff; }
+.pendente-card.proximo-vencimento .pendente-meta span { color: #b3e0ff; }
+
+
+/* ==================================== */
+/* MODAL */
+/* ==================================== */
+.modal-content {
+    padding: 35px; /* Mais espaçamento interno */
+}

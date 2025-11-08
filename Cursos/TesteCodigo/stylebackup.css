@@ -1,0 +1,283 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 30px;
+    background-color: #f7f7f7;
+}
+h1, h2 {
+    text-align: center;
+    color: #333;
+}
+table {
+    width: 90%;
+    margin: 20px auto;
+    border-collapse: collapse;
+    background-color: #fff;
+    box-shadow: 0px 2px 8px rgba(0,0,0,0.1);
+}
+th, td {
+    padding: 10px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+th {
+    background-color: #007BFF;
+    color: #fff;
+}
+input, select {
+    padding: 5px;
+    text-align: center;
+    width: 95%;
+}
+tfoot td {
+    font-weight: bold;
+    background-color: #f0f0f0;
+}
+.btn-container {
+    text-align: center;
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+button {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 14px;
+    margin: 5px;
+}
+button:hover {
+    background-color: #0056b3;
+}
+.btn-remover {
+    background-color: #dc3545;
+}
+.btn-remover:hover {
+    background-color: #a71d2a;
+}
+.btn-cadastro {
+    background-color: #28a745;
+}
+.btn-cadastro:hover {
+    background-color: #1e7e34;
+}
+.btn-voltar {
+    background-color: #6c757d;
+}
+.btn-voltar:hover {
+    background-color: #5a6268;
+}
+.btn-cadastro-link, .btn-voltar-link {
+    text-decoration: none;
+}
+/* Estilos do Teclado Numérico */
+.teclado-numerico {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #e2e2e2;
+    padding: 10px;
+    box-shadow: 0px -2px 10px rgba(0,0,0,0.2);
+    z-index: 1000;
+}
+.teclado-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    max-width: 300px;
+    margin: 0 auto;
+}
+.teclado-numerico button {
+    width: 100%;
+    height: 50px;
+    font-size: 1.5em;
+    background-color: #fff;
+    color: #333;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    transition: background-color 0.2s;
+}
+.teclado-numerico button:hover {
+    background-color: #f0f0f0;
+}
+.btn-adicionar-valor {
+    width: 100%;
+    margin-top: 10px;
+    padding: 15px;
+    background-color: #28a745;
+    color: white;
+    font-size: 1.2em;
+    border: none;
+    border-radius: 8px;
+}
+.btn-adicionar-valor:hover {
+    background-color: #1e7e34;
+}
+.btn-finalizar {
+    background-color: #17a2b8;
+}
+.btn-finalizar:hover {
+    background-color: #138496;
+}
+/* Alinhamento dos botões inferiores */
+.botoes-inferiores {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+}
+/* Estilos do Formulário de Cliente */
+#formCliente {
+    width: 90%;
+    margin: 20px auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 2px 8px rgba(0,0,0,0.1);
+}
+.form-grupo {
+    margin-bottom: 15px;
+}
+.form-grupo label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+.form-grupo input, .form-grupo select {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+}
+.btn-limpar {
+    background-color: #ffc107;
+    color: #333;
+}
+.btn-limpar:hover {
+    background-color: #e0a800;
+}
+/* Estilos para a seção do cliente na página de vendas */
+.info-cliente {
+    width: 90%;
+    margin: 20px auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 2px 8px rgba(0,0,0,0.1);
+}
+/* Nova regra para ocultar elementos */
+.oculto {
+    display: none;
+}
+.checkbox-container {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+.data-actions {
+    text-align: center;
+    margin-top: 20px;
+}
+.btn-importar {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 14px;
+    margin: 5px;
+    display: inline-block;
+}
+.btn-importar:hover {
+    background-color: #0056b3;
+}
+
+/* Novos estilos para o campo de busca */
+.search-container {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    padding: 0 10px;
+    background-color: #fff;
+}
+.search-container:focus-within {
+    border-color: #007BFF;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+.search-container input {
+    flex: 1;
+    border: none;
+    padding: 10px;
+    padding-left: 35px;
+    padding-right: 35px;
+    background-color: transparent;
+    outline: none;
+    width: auto;
+    text-align: left;
+}
+.search-icon, .clear-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #999;
+    font-size: 16px;
+    cursor: pointer;
+}
+.search-icon {
+    left: 15px;
+}
+.clear-button {
+    right: 15px;
+    background: none;
+    border: none;
+    padding: 0;
+    line-height: 1;
+    display: none;
+}
+.clear-button:hover {
+    color: #555;
+}
+/* Estilos para o novo mini-formulário de cliente */
+.mini-form-cliente {
+    background-color: #fff;
+    padding: 20px;
+    margin-top: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+.mini-form-cliente h3 {
+    margin-top: 0;
+    text-align: center;
+    color: #007BFF;
+}
+.dados-cliente-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr; /* Colunas para as labels e inputs */
+    gap: 20px;
+}
+.dados-cliente-grid div {
+    display: flex;
+    flex-direction: column;
+}
+.dados-cliente-grid label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #555;
+}
+.dados-cliente-grid input {
+    border: 1px solid #ccc;
+    background-color: #f7f7f7;
+    padding: 8px;
+    border-radius: 4px;
+}

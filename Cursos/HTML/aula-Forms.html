@@ -1,0 +1,50 @@
+<!--FORMS
+        --CAPTURAR DADE ENTRADA
+        --iNPUT ->ENTRADA DE DADOS
+        --LABEL -> RÓTULO
+        --TEXTAREA -> ÁREA DE TEXTO
+        --SELECT -> CAIXA DE SELEÇÃO
+        --OPTION -> OPÇÃO
+        --BUTTON -> BOTÃO
+        --FIELDSET -> AGRUPAR ELEMENTOS
+        --LEGEND -> LEGENDAS
+        --FORM -> FORMULÁRIO
+        --TYPE -> TIPO
+        --NAME -> NOME
+        --PLACEHOLDER -> TEXTO DE SUGESTÃO
+        --REQUIRED -> OBRIGATÓRIO
+        --AUTOFUCUS -> FOCO AUTOMÁTICO
+        --CHECKBOX -> CAIXA DE SELEÇÃO  
+        --RADIO -> BOTÃO DE OPÇÃO
+        --SUBMIT -> ENVIAR
+
+-->
+        <form action="" method="get" anctype="multipart/form-data">
+            <h2>Formulário de Cadastro</h2>
+            <label for="nome">Nome:
+                <input type="text" name="nome" autocomplete="name" id="nome"/>
+            </label>
+            <label for="rua">Rua:
+                <input type="text" name="rua" autocomplete="street-address" id="rua"/>
+            </label>
+            <label for="cidade">Cidade:
+                <input type="text" name="cidade" autocomplete="address-level2" id="cidade"/>    
+            </label>
+            <label for="estado">Estado:
+                <input type="text" name="estado" autocomplete="address-level1" id="estado"/>
+            </label>
+            <label for="cep">CEP:
+                <input type="text" name="cep" autocomplete="postal-code" id="cep"/>
+            </label>
+            <label for="arquivo">Selecione um arquivo:
+                <input type="file" name="arquivo" id="arquivo"/>
+            </label>
+            <button type="submit">Enviar</button>
+            <button type="reset">Limpa dados da tela</button>
+            <!-- sempre que voce colocar um input e ele for do campo file,
+              voce precisa habititar a opção 
+             enctype="multipart/form-data" na tag do form
+            como fica no codigo <form action="" method="get" anctype="multipart/form-data">
+             
+            -->
+        </form>

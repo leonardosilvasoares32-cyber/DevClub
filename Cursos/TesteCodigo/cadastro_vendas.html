@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Tabela de Vendas</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Tabela de Vendas</h1>
+
+    <div class="btn-container">
+        <a href="cadastro.html" class="btn-cadastro-link" target="_blank">
+            <button class="btn-cadastro">+ Ir para Cadastro de Produtos</button>
+        </a>
+        <a href="cadastro-cliente.html" class="btn-cadastro-link" target="_blank">
+            <button class="btn-cadastro">+ Ir para Cadastro de Clientes</button>
+        </a>
+    </div>
+
+    <div class="info-cliente">
+        <h2>Informações do Cliente</h2>
+        
+        <div class="checkbox-container">
+            <label>
+                <input type="checkbox" id="checkClienteCadastrado">
+                Cliente Cadastrado
+            </label>
+            <label>
+                <input type="checkbox" id="checkClienteNaoCadastrado">
+                Cliente Não Cadastrado
+            </label>
+            <button class="btn-limpar" onclick="limparCamposCliente()">Limpar</button>
+        </div>
+
+        <div id="secaoClienteCadastrado" class="form-grupo oculto">
+            <label for="campoCnpj">Digite o CNPJ:</label>
+            <input type="text" id="campoCnpj" list="listaCnpjs" placeholder="CNPJ do cliente..." oninput="debounceBuscarCnpj()">
+            <datalist id="listaCnpjs"></datalist>
+        </div>
+
+        <div id="secaoClienteNaoCadastrado" class="form-grupo-grid oculto">
+            <div class="form-grupo">
+                <label for="razaoSocial">Razão Social:</label>
+                <input type="text" id="razaoSocial">
+            </div>
+            <div class="form-grupo">
+                <label for="nomeFantasia">Nome Fantasia:</label>
+                <input type="text" id="nomeFantasia">
+            </div>
+            <div class="form-grupo">
+                <label for="cnpj">CNPJ:</label>
+                <input type="text" id="cnpj">
+            </div>
+            <div class="form-grupo">
+                <label for="telefone">Telefone:</label>
+                <input type="tel" id="telefone">
+            </div>
+            <div class="form-grupo">
+                <label for="comprador">Comprador:</label>
+                <input type="text" id="comprador">
+            </div>
+            <div class="form-grupo">
+                <label for="email">Email:</label>
+                <input type="email" id="email">
+            </div>
+            <div class="form-grupo">
+                <label for="vendedor">Vendedor:</label>
+                <input type="text" id="vendedor">
+            </div>
+        </div>
+    </div>
+    
+    <hr>
+
+    <h2>Lançamento de Vendas</h2>
+    <table id="tabelaVendas">
+        <thead>
+            <tr>
+                <th>Produto</th>
+                <th>Caixa Master</th>
+                <th>Quantidade</th>
+                <th>Valor Unitário (R$)</th>
+                <th>Total (R$)</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="5">Total Geral</td>
+                <td id="totalGeral">0</td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <div class="botoes-inferiores">
+        <button onclick="adicionarProduto()" disabled>+ Adicionar Produto</button>
+        <button class="btn-finalizar" onclick="finalizarPedido()">Finalizar Pedido e Enviar</button>
+    </div>
+
+    <div id="tecladoNumerico" class="teclado-numerico">
+        <div class="teclado-grid">
+            <button onclick="digitar('1')">1</button>
+            <button onclick="digitar('2')">2</button>
+            <button onclick="digitar('3')">3</button>
+            <button onclick="digitar('4')">4</button>
+            <button onclick="digitar('5')">5</button>
+            <button onclick="digitar('6')">6</button>
+            <button onclick="digitar('7')">7</button>
+            <button onclick="digitar('8')">8</button>
+            <button onclick="digitar('9')">9</button>
+            <button onclick="digitar('.')">.</button>
+            <button onclick="digitar('0')">0</button>
+            <button onclick="apagar()">⌫</button>
+        </div>
+        <button onclick="adicionarValor()" class="btn-adicionar-valor">Adicionar Valor</button>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="script.js"></script>
+</body>
+</html>

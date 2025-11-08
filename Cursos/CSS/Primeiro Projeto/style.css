@@ -1,0 +1,146 @@
+*{
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+header{
+margin-top: 47px;
+margin-left: 42px;
+
+}
+
+.link-header{
+    
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 21px;
+    text-align: center;
+    letter-spacing: 0.875px;
+    color: #17233d;
+    cursor: pointer;
+    margin-right: 32px;
+}   
+
+.button-header{
+    background: #6fbf44;
+    border-radius: 6px; /* curvatura das bordas, quanto maior, mais curvado*/
+    cursor: pointer;
+    width: 124px;
+    height: 51px;
+    border: none;
+    font-size: 20px;
+    font-weight: 600; 
+    line-height: 29px; /*altura da linha*/
+    color: #FFFFFF;
+    letter-spacing: 1px; /*espaçamento entre as letras*/
+}
+.button-header:hover{
+    background: #5aa637;
+}
+.button-header:active{
+    opacity: 0.6;
+}
+
+.logo-image {
+    margin: 163px 0 0 123px; /* margem superior, direita, inferior e esquerda */
+    width: 568px;
+    height: 500px;
+    margin-left: 125px;
+    display: inline-block;
+}
+
+.text-section{
+    display: inline-block;
+    margin-left: 86px;
+}
+
+
+.h1-section{
+    font-weight: 700;
+    font-size: 62px;
+    line-height: 82px; /* line-heig = significa autura da linha */
+    letter-spacing: 0.6px;
+    color: #161a49
+}
+
+
+.p-section{
+    font-weight: 300;
+    font-size: 24px;
+    line-height: 29px;
+    color: #848484;
+    width: 515px;
+    margin-top: 32px;
+    margin-bottom: 65px;
+}
+
+.link-section{
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 29px;
+    color: #665ae1;
+    text-decoration: none;
+    cursor: pointer;
+    margin-top: 32px;
+}
+
+.button-main{
+    background: #ADFf00;
+    border-radius: 30px;
+    
+    width: 239px;
+    height: 64px;
+    border: none;
+    cursor: pointer;
+    filter: drop-shadow( 0px 4px 4px rgba(0, 0, 0, 0.25) );
+
+    font-weight: 700;
+    font-size: 28px;
+    line-height: 34px;
+    color: #000000;
+}
+.button-main:hover{
+    background: #9ae600;
+}
+.button-main:active{
+    opacity: 0.6;
+}
+@media screen and (max-width: 710px){
+    .logo-image{
+        max-width: 90%;
+        height: auto;
+        margin: 0;
+        padding: 0;
+        position: static;
+    }
+    .text-section{
+        width: 100%;
+        height: auto;
+        margin: 0;
+        padding: 0;
+    }
+    .h1-section{
+        font-size: 42px;
+        line-height: 52px; 
+    }
+    .p-section{
+        font-size: 20px;
+        line-height: 26px;
+        width: 90%;
+        margin-top: 20px;
+        margin-bottom: 40px;
+    }
+    .button-main{
+        width:auto;
+        height: auto;
+        font-size: 22px;
+        line-height: 28px;
+        display: block;
+    }
+}
+/*header{
+    margin: 44px 0 144px 76px  ;
+}
+*/

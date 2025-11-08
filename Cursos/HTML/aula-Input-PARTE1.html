@@ -1,0 +1,59 @@
+metodos de colocar input relacionado com a label:
+METODO 1 - colocar o input dentro da label
+
+
+        <label> Nome:
+            <input  autocomplete="name"
+                    placeholder="Digite seu nome"
+                    type="text"
+            />
+        </label>
+
+        <label>Email:
+            <input  autocomplete="email"
+                    placeholder="Digite seu email"
+                    type="email"
+                    autofocus
+            />
+        </label>
+
+METODO 2 - usar o atributo "for" na label e "id" no input
+
+        <label for="nome"> Nome:</label>
+            <input  id="nome"
+                    autocomplete="name"
+                    placeholder="Digite seu nome"
+                    type="text"
+            />
+        <br>
+
+        <label for="email">Email:</label>
+            <input  id="email"
+                    autocomplete="email"
+                    placeholder="Digite seu email"
+                    type="email"
+            />
+    <!-- NO METODO 2 NA LABEL USAMOS O FOR (DE QUEM É A LABEL) E NO INPUT UTILIZAMOS
+    O ID (QUE TEM QUE SER IGUAL AO FOR DA LABEL PARA QUE ELES FIQUEM RELACIONADOS) 
+    -->
+    
+    !--tipos de cotroles para utilizar na tag <input>
+    type: define o tipo de campo (text, password, email, number, date, checkbox, radio, file, submit, reset, button, hidden)
+    name: define o nome do campo, usado para identificar o campo ao enviar o formulário
+    value: define o valor inicial do campo
+    placeholder: define um texto que aparece dentro do campo quando ele está vazio
+    required: torna o campo obrigatório para envio do formulário
+    readonly: torna o campo somente leitura, não permitindo alterações
+    disabled: desabilita o campo, impedindo qualquer interação
+    maxlength: define o número máximo de caracteres que podem ser inseridos no campo
+    minlength: define o número mínimo de caracteres que devem ser inseridos no campo
+    size: define a largura do campo em caracteres
+    pattern: define uma expressão regular que o valor do campo deve corresponder para ser considerado válido
+    autocomplete: sugere valores previamente usados pelo usuário para preencher o campo automaticamente
+    autofocus: faz com que o campo receba foco automaticamente quando a página é carregada
+    step: define os incrementos permitidos para campos numéricos ou de data (ex: step="1" permite apenas números inteiros)
+    min e max: definem os valores mínimo e máximo permitidos para campos numéricos ou de data
+    multiple: permite a seleção de múltiplos arquivos em campos do tipo file
+    form: associa o campo a um formulário específico, mesmo que esteja fora da tag <form>
+    spellcheck: ativa ou desativa a verificação ortográfica no campo (true ou false)
+-->

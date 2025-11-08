@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Tabela de Vendas</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Tabela de Vendas</h1>
+
+    <div class="btn-container">
+        <a href="cadastro.html" class="btn-cadastro-link" target="_blank">
+            <button class="btn-cadastro">+ Ir para Cadastro de Produtos</button>
+        </a>
+        <a href="cadastro-cliente.html" class="btn-cadastro-link" target="_blank">
+            <button class="btn-cadastro">+ Ir para Cadastro de Clientes</button>
+        </a>
+    </div>
+
+    <div class="info-cliente">
+        <h2>Informações do Cliente</h2>
+        
+        <div class="form-grupo">
+            <label for="campoBusca">Buscar Cliente:</label>
+            <div class="search-container">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="campoBusca" placeholder="Buscar por Razão Social, CNPJ, etc..." oninput="debounceBuscarCliente()">
+                <button type="button" class="clear-button" onclick="limparBusca()">❌</button>
+            </div>
+        </div>
+        
+        <div class="checkbox-container">
+            <label>
+                <input type="checkbox" id="checkCnpj" onchange="debounceBuscarCliente()">
+                Buscar por CNPJ
+            </label>
+            <label>
+                <input type="checkbox" id="checkRazaoSocial" onchange="debounceBuscarCliente()">
+                Buscar por Razão Social
+            </label>
+        </div>
+
+        <div class="form-grupo">
+            <label for="campoClienteResultado">Cliente:</label>
+            <input type="text" id="campoClienteResultado" list="listaClientes" placeholder="Selecione um cliente..." onchange="selecionarClientePelaBusca()">
+            <datalist id="listaClientes"></datalist>
+            <button class="btn-limpar" onclick="limparCamposCliente()">Limpar</button>
+        </div>
+        
+        <div class="mini-form-cliente oculto">
+            <h3>Dados do Cliente Selecionado</h3>
+            <div class="dados-cliente-grid">
+                <div>
+                    <label for="displayRazaoSocial">Razão Social:</label>
+                    <input type="text" id="displayRazaoSocial" readonly>
+                </div>
+                <div>
+                    <label for="displayNomeFantasia">Nome Fantasia:</label>
+                    <input type="text" id="displayNomeFantasia" readonly>
+                </div>
+                <div>
+                    <label for="displayCnpj">CNPJ:</label>
+                    <input type="text" id="displayCnpj" readonly>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-grupo oculto">
+            <label for="razaoSocial">Razão Social:</label>
+            <input type="text" id="razaoSocial" readonly>
+        </div>
+        <div class="form-grupo oculto">
+            <label for="cnpj">CNPJ:</label>
+            <input type="text" id="cnpj" readonly>
+        </div>
+        <div class="form-grupo oculto">
+            <label for="telefone">Telefone:</label>
+            <input type="tel" id="telefone" readonly>
+        </div>
+        <div class="form-grupo oculto">
+            <label for="comprador">Comprador:</label>
+            <input type="text" id="comprador" readonly>
+        </div>
+        <div class="form-grupo oculto">
+            <label for="email">Email:</label>
+            <input type="email" id="email" readonly>
+        </div>
+        <div class="form-grupo oculto">
+            <label for="vendedor">Vendedor:</label>
+            <input type="text" id="vendedor" readonly>
+        </div>
+    </div>
+    
+    <hr>
+
+    <h2>Lançamento de Vendas</h2>
+    <table id="tabelaVendas">
+        <thead>
+            <tr>
+                <th>Produto</th>
+                <th>Quantidade</th>
+                <th>Valor Unitário (R$)</th>
+                <th>Total (R$)</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="4">Total Geral</td>
+                <td id="totalGeral">0</td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <div class="botoes-inferiores">
+        <button onclick="adicionarProduto()">+ Adicionar Produto</button>
+        <button class="btn-finalizar" onclick="finalizarPedido()">Finalizar Pedido e Enviar</button>
+    </div>
+
+    <div id="tecladoNumerico" class="teclado-numerico">
+        <div class="teclado-grid">
+            <button onclick="digitar('1')">1</button>
+            <button onclick="digitar('2')">2</button>
+            <button onclick="digitar('3')">3</button>
+            <button onclick="digitar('4')">4</button>
+            <button onclick="digitar('5')">5</button>
+            <button onclick="digitar('6')">6</button>
+            <button onclick="digitar('7')">7</button>
+            <button onclick="digitar('8')">8</button>
+            <button onclick="digitar('9')">9</button>
+            <button onclick="digitar('.')">.</button>
+            <button onclick="digitar('0')">0</button>
+            <button onclick="apagar()">⌫</button>
+        </div>
+        <button onclick="adicionarValor()" class="btn-adicionar-valor">Adicionar Valor</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

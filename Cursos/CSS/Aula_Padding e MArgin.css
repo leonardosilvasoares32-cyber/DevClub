@@ -1,0 +1,45 @@
+.box{
+
+    width: 200px; /* largura*/
+    height: 200px; /* altura*/
+    background-color: blue; /* cor de fundo*/
+    margin: 100px; /* margem ou espacqmento externo */
+    padding: 100px; /* preenchimento ou espacamento interno*/
+    border: 10px solid black; /* borda*/
+    box-sizing: border-box; /* altera o comportamento da largura e altura da caixa
+    para incluir o padding e a borda na largura e altura totais da caixa.
+    Se não for especificado, o valor padrão é content-box.
+    Ou seja, a largura e altura definidas (width e height) referem-se apenas
+    ao conteúdo da caixa, excluindo o padding e a borda.
+    Com box-sizing: border-box;, a largura e altura definidas incluem o conteúdo, 
+    o padding e a borda. Isso facilita o controle do tamanho total da caixa,
+    especialmente ao adicionar padding e bordas, pois o tamanho total da caixa  
+    permanece consistente com as dimensões especificadas.
+    */
+    
+    /*content-box é o padrão*/  
+    text-align: center ; /*alinhamento do texto*/
+
+   /*no css  podemos colocar padding e margin diferentes para cada lado do box, onde:
+    Top = cima
+    Right = direita    
+    Bottom = baixo
+    Left = esquerda
+    4 valores = top, right, bottom, left
+    Exemplo: padding: 10px 20px 30px 40px; (topo, direita, baixo, esquerda)
+    Exemplo: margin: 10px 20px 30px 40px; (topo, direita, baixo, esquerda)
+    Exemplo: padding: 10px 20px; (topo e baixo, direita e esquerda)
+*/
+}
+.box2{
+
+    width: 200px; /* largura*/
+    height: 50px; /* altura*/
+    background-color: red;
+    margin-top: 10px; /* margem ou espacamento externo somente no topo */
+    padding: 50px; /* preenchimento ou espacamento interno */
+    border: 10px solid black; /* borda */
+    /* box-sizing: border-box;  content-box é o padrão */
+    text-align: center; /* alinhamento do texto */
+
+}

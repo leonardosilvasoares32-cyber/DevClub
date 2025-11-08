@@ -1,0 +1,214 @@
+/* tipos de seletores e propriedades em css
+    seletores: elemento, id, class
+    propriedades: cor, tamanho, fonte, margem, padding, borda   
+    * - seletor de todos os elementos
+    # - seletor de id
+    . - seletor de classe
+   Seletor de classe - a classe pode ser aplicada a qualquer elemento HTML, 
+   Seletor de ID - o ID deve ser único e aplicado a um único elemento no HTML e ser chamado pelo id no css
+    Propriedades comuns:
+    color - cor do texto
+    background-color - cor de fundo
+    font-size - tamanho da fonte
+    font-family - tipo de fonte
+    margin - espaço fora do elemento
+    padding - espaço dentro do elemento
+    border - borda ao redor do elemento
+    text-align - alinhamento do texto
+    display - como o elemento é exibido (block, inline, flex, grid)
+    width - largura do elemento
+    height - altura do elemento
+    cursor - tipo de cursor ao passar o mouse
+    border-radius - borda arredondada
+    box-shadow - sombra ao redor do elemento
+    hover - efeito ao passar o mouse
+exemplo de uso do selotor de classe e id
+    .classe {
+        propriedade: valor;
+    }
+    #id {
+        propriedade: valor;
+    }
+        <h1 id="titulo-principal">Titulo Principal</h1>
+
+*/
+
+/*
+exemplo de seletor comum a todos os elementos
+h1 {
+    color: rgb(248, 248, 252);
+    background: black;
+    text-align: center;
+    padding: 20px;
+}
+
+p {
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    margin: 20px;
+}
+
+h2 {
+    color: navy;
+    margin-top: 30px;
+}
+
+ul {
+    list-style-type: square;
+    margin: 20px;
+    padding: 0;
+}
+
+li {
+    margin-bottom: 10px;
+}
+
+button {
+    background-color: blue;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 10px;
+    margin: 20px;
+} */
+/* exemplo de seletor de id */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+#Titulo {
+    color: rgb(248, 248, 252);
+    background: black;
+    text-align: center;
+    padding: 20px; /* espaçamento interno */
+    margin: 20px; /* espaçamento externo */
+    font-family: 'Roboto', sans-serif; /* define a fonte como Roboto, se nao tiver, usa uma fonte sans-serif */
+    font-size: 40px;
+    text-shadow: 2px 8px 5px rgb(251, 255, 0);
+    /* sombra do texto, os valores sao:
+    1 valor - deslocamento horizontal
+    2 valor - deslocamento vertical
+    3 valor - desfoque
+    4 valor - cor da sombra */
+    
+}
+#SubTitulo {
+    color: navy;
+    margin-top: 30px;
+} 
+
+#button1 {
+    background-color: blue;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 10px;
+    margin: 20px;
+}
+
+.botao {
+    background-color: rgb(74, 2, 243);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 10px;
+    margin: 20px;
+}
+
+#botao3 {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 10px;
+    margin: 20px;
+}
+
+
+
+/* unidade de medidas no css
+Absolutas:
+    px - pixels
+    cm - centímetros
+    mm - milímetros
+    in - polegadas
+Relativas:
+    As ubidades sao sempre relativas a alguem ou algum outro valor, como o tamanho da fonte do elemento pai ou o tamanho da janela de visualização.
+    % - porcentagem do elemento pai
+    em - relativo ao tamanho da fonte do elemento pai
+    rem - relativo ao tamanho da fonte raiz (geralmente o elemento html)
+    
+    vw - viewport width (largura da janela de visualização)
+    vh - viewport height (altura da janela de visualização)
+    vmin - menor valor entre vw e vh
+    vmax - maior valor entre vw e vh */
+
+    .pai {
+        background-color: rgba(9, 85, 250, 0.973);
+        width: 50%; /* largura do pai de 100px */
+        height: 50%; /* 100 pixels de altura */
+        font-size: 20vmin; /* tamanho da fonte de 30 pixels */
+    }
+    .filho {
+        width: 50%; /* largura do filho sera 50% do tamanho do pai, ou seja 50px */
+        height: 50%; /* altura do filho sera 50% do tamanho do pai, ou seja 50px */
+        font-size: 50%; /* é relativo ao elemento pai, o exeemplo o pai tem 16px o filho tera 200% do tamanho
+         do tamanha do pai, ou seja ele tera o dobro do tamanho do pai */
+         background: rgb(251, 255, 0);
+    }
+.vovo {
+    width: 30vw; /* largura sera 50% da largura da janela de visualização */
+    height: 30vh; /* altura sera 50% da altura da janela de visualização */
+    background: rgb(255, 0, 0);
+    font-size: 20vmin; /* o tamanho da fonte sera 20% do menor valor entre a largura e a altura da janela de visualização */
+}
+
+h3 {
+    font-family: 'Roboto', sans-serif;
+    font-size: 40px;
+    color: rgb(0, 0, 0);
+    margin: 30px;
+    font-weight: lighter;
+    /* o fonte-weight pode variar de 100 a 900 
+    sendo 100 a mais fina e 900 a mais grossa
+    ou pode ser normal, bold, bolder, lighter
+    bold - negrito
+    normal - normal
+    bolder - mais negrito que o elemento pai
+    lighter - mais fino que o elemento pai
+
+    */
+    font-style: italic;
+    
+    text-decoration: underline;
+    /* 
+    background: yellow;
+    line-height : 20px; /* espacamento entra as linhas */
+    /* letter-spacing: 5px; /* espaçamento entre as letras 
+    word-spacing: 20px; espaçamento entre as palavras */
+    /* text-align: center;  alinhamento do texto, podendo ser: 
+    center - centralizado
+    left - alinhado a esquerda
+    right - alinhado a direita
+    justify - justificado */ 
+    text-transform: lowercase; /* transforma o texto em maiusculo, podendo ser:
+    uppercase - maiusculo
+    lowercase - minusculo
+    capitalize - primeira letra maiuscula */
+    text-shadow: 2px 2px 5px blue; /* sombra do texto, os valores sao:
+    1 valor - deslocamento horizontal
+    2 valor - deslocamento vertical
+    3 valor - desfoque
+    4 valor - cor da sombra */
+    
+
+
+    
+}

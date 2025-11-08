@@ -1,0 +1,51 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+title{
+    font-size: 30px;
+}
+div{
+    height: 500px;
+    width: 500px;
+    background: blue;
+}
+
+/* 
+    PRICIPAIS TIPOS DE @MEDIA
+        ALL - TODOS OS DISPOSITIVOS - É O TIPO PADRAO SE 
+    NENHUM FOR SELECIONADO
+        SCREAM - MONITORES E TELAS - Destinado a dispositivos
+     com telas coloridas, como computadores, 
+     tablets e smartphones. 
+        PRINT - IMPRESSORAS - Utilizado para aplicar estilos
+     específicos quando um documento é impresso, por exemplo,
+     removendo elementos de navegação. 
+        SPEECH - LEITORES DE TELA - Para dispositivos de 
+    síntese de fala e leitores de tela, que "leem" a 
+    página em voz alta para usuários com deficiência visual.
+
+    Outros Tipos de Mídia Relevantes
+        projection: Para apresentações projetadas, 
+    como slides de projeção. 
+        handheld: Destinado a dispositivos portáteis ou móveis,
+     como celulares antigos. 
+        tty: Para mídia que usa uma grade de caracteres fixos,
+     como teletipos. 
+        braille: Para dispositivos Braille utilizados por 
+    pessoas com deficiência visual.
+
+    orientacoes
+        portrait = altura maios que a largura
+        landscape = largura mais que a autura
+*/
+
+@media scream and (max-width: 600px) and (orientation: portrait) {
+    div{
+        background: red;
+        height: 200px;
+        width: 200px;
+    }
+}

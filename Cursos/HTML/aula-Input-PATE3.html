@@ -1,0 +1,87 @@
+<h1> tipos de input</h1>
+<br>
+<br>
+<h2> tipos utilizacao do radio </h2>
+<label> com mesmo nome (name=), so pode selecionar um
+    <br>
+    <form>
+        <input type="radio" name="cor" value="vermelho" id="vermelho">
+        <label for="vermelho">Vermelho</label>
+
+        <input type="radio" name="cor" value="azul" id="azul">
+        <label for="azul">Azul</label>
+
+        <input type="radio" name="cor" value="verde" id="verde">
+        <label for="verde">Verde</label>
+    </form>
+</label>
+
+<label>com nomes(name=) diferentes, pode selecionar todos
+    <br>
+    <form>
+        <input type="radio" name="carro1" value="ferrari" id="ferrari">
+        <label for="ferrari">Ferrari</label>
+
+        <input type="radio" name="carro2" value="bmw" id="bmw">
+        <label for="bmw">BMW</label>
+
+        <input type="radio" name="carro3" value="audi" id="audi">
+        <label for="audi">Audi</label>
+    </form>
+</label>
+<br>
+<br>
+<Label>password
+    <input
+        
+        type="password" 
+        placeholder="Digite sua senha"
+    />
+</Label>
+
+<Label>email
+    <input 
+        type="email"
+        placeholder="Digite seu email"
+    />
+</Label>
+<Label>teledone
+    <input 
+        type="tel"
+        placeholder="Digite seu telefone"
+    />
+</Label>
+
+<Label>data e hora local
+    <input 
+        type="datetime-local"
+        <!--esse input datetime-loca nao recebe placeholder--!--> 
+    />
+</Label>
+
+<label>nuemero
+    <input 
+        type="number"
+        placeholder="Digite um número"   
+    />
+</label>
+
+<br>
+<br>
+<br>
+
+<Label>escolher arquivos multiplos 
+    <br>
+    <input 
+        type="file"
+        multiple
+    />
+</Label>
+<br>
+<br>
+<!--Usando o accept para filtrar tipos 
+    de arquivos que eu quero aceitar  Ex: image/*, .pdf, .docx, .xlsx, 
+    ex2: accept="audio/*" acita todos os tipos de audios
+    ex3: accept="video/*" aceita todos os tipos de videos  
+    ex4: accept="image/png, image/jpeg" aceita apenas png e jpeg
+    ex5: accept=".doc, .docx, .xml, .pdf" aceita apenas esses tipos de arquivos)-->

@@ -1,0 +1,139 @@
+
+
+/* 
+tipos de pseudo-classes:
+
+    ESSAS SAO AS QUE JA UTILIZEI
+        :before - insere conteúdo antes do elemento
+        :after - insere conteúdo depois do elemento
+        :first-letter - seleciona a primeira letra do elemento
+        :first-line - seleciona a primeira linha do elemento
+        :active - quando o elemento está sendo clicado
+        :hover - quando o mouse está sobre o elemento
+        :visited - quando o link já foi visitado
+        :checked - quando o elemento está selecionado (checkbox ou radio)
+        :focus - quando o elemento está em foco (clicado ou selecionado)
+        :empty - quando o elemento esta vazio
+        :first-child - quando o elemento é o primeiro filho do seu pai
+        :last-child - quando o elemento é o último filho do seu pai
+        :first-of-type - quando o elemento é o primeiro do seu tipo entre os irmãos
+        :nth-of-type(n) - quando o elemento é o n-ésimo do seu tipo entre os irmãos
+
+ESSAS SAO AS QUE EU AINDA NAO UTILIZEI
+
+        :nth-child(n) - quando o elemento é o n-ésimo filho do seu pai
+        :not(selector) - quando o elemento não corresponde ao seletor
+        :last-of-type - quando o elemento é o último do seu tipo entre os irmãos
+        :nth-of-type(n) - quando o elemento é o n-ésimo do seu tipo entre os irmãos
+        :disabled - quando o elemento está desabilitado
+        :enabled - quando o elemento está habilitado
+        :root - seleciona o elemento raiz (geralmente o <html>)
+        :lang(language) - seleciona elementos com o idioma especificado
+        :target - seleciona o elemento que é o alvo da URL
+
+
+*/
+
+*{
+
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+   
+}
+
+#a{
+     font-size: 20px;
+     margin-left: 20px;
+}
+
+#a:active{
+    color: red;
+    font-size: 30px;
+    
+}
+
+#a1{
+    font-size: 20px;
+    margin-left: 20px;    
+}
+
+#a1:visited{
+    color: green;
+    
+}
+
+#button{
+    background-color: rgb(0, 255, 76);
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    margin-left: 20px;
+}
+
+#button:hover{
+    background-color: rgb(0, 47, 255);
+    color: white;
+    font-size: 30px;
+    cursor: pointer;
+}
+
+#button1{
+    background-color: blue;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    margin-left: 20px;
+}
+
+#button1:hover{
+    background-color: rgb(43, 255, 0);
+    color: white;
+    font-size: 30px;
+    cursor: pointer;
+}
+
+#p{
+
+    font-size: 40px;
+    margin-left: 20px;
+
+}
+
+#p1{
+
+    font-size: 40px;
+    margin-left: 20px;
+
+}
+
+#p:hover{
+    color: blue;
+}
+
+#placeholder{
+    margin-left: 20px;
+    font-size: 20px;
+}
+
+#chekbox{
+    margin-left: 20px;
+    font-size: 20px;
+}
+#checkbox:checked{
+    color: blueviolet;
+    width: 40px;
+    height: 40px;
+}
+
+#radio:checked{
+    color: rgb(255, 0, 55);
+    width: 40px;
+    height: 40px;
+}
+
+label{
+    font-size: 20px;
+    margin-left: 20px;
+    
+}

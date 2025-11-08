@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Controle Financeiro V31 - Dark Mode</title>
+    
+    <link rel="stylesheet" href="style.css"> 
+    
+    </head>
+<body>
+
+    <header>
+        <h1>Controle Financeiro Pessoal</h1>
+    </header>
+
+    <main>
+        <div class="tabs">
+            <button class="tab-button ativa" data-tab="dashboard">Dashboard</button>
+            <button class="tab-button" data-tab="novo-registro">Novo Registro</button>
+            <button class="tab-button" data-tab="lancamentos">Lançamentos Registrados</button>
+            <button class="tab-button" data-tab="pendentes">Contas Pendentes</button>
+            <button class="tab-button" data-tab="relatorio">Relatório Mensal</button>
+        </div>
+
+        <div id="dashboard" class="aba-conteudo">
+            <h2>Dashboard - Resumo Mensal</h2>
+            
+            <div class="filtro-mes-dashboard form-group">
+                <label for="filtroMesDashboard">Mês de Referência:</label>
+                <select id="filtroMesDashboard" class="form-control">
+                    <option value="10-2025">Outubro/2025</option>
+                    </select>
+                <button class="btn-primary">Atualizar</button>
+            </div>
+
+            <div class="dashboard-cards">
+                <div class="card card-receita">
+                    <h3>Total de Receitas</h3>
+                    <p>R$ 12.500,00</p>
+                </div>
+                <div class="card card-despesa">
+                    <h3>Total de Despesas</h3>
+                    <p>R$ 7.800,00</p>
+                </div>
+                <div class="card card-saldo">
+                    <h3>Saldo Atual</h3>
+                    <p>R$ 4.700,00</p>
+                </div>
+            </div>
+
+            <div class="grafico-container">
+                <canvas id="graficoDashboard"></canvas>
+            </div>
+        </div>
+
+        <div id="novo-registro" class="aba-conteudo oculto">
+            <h2>Novo Lançamento</h2>
+            
+            <form id="formNovoLancamento">
+                <div class="form-group">
+                    <label for="descricao">Descrição:</label>
+                    <input type="text" id="descricao" required>
+                </div>
+                <div class="form-group">
+                    <label for="valor">Valor:</label>
+                    <input type="number" id="valor" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label for="tipo">Tipo:</label>
+                    <select id="tipo" required>
+                        <option value="receita">Receita</option>
+                        <option value="despesa">Despesa</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="dataVencimento">Data Vencimento:</label>
+                    <input type="date" id="dataVencimento" required>
+                </div>
+                <div class="form-group">
+                    <label for="categoria">Categoria:</label>
+                    <input type="text" id="categoria">
+                </div>
+                <button type="submit" class="btn-primary">Registrar Lançamento</button>
+            </form>
+        </div>
+
+        <div id="lancamentos" class="aba-conteudo oculto">
+            <h2>Lançamentos Registrados</h2>
+            
+            <div class="filtro-container">
+                <div class="filtro-group">
+                    <div class="filtro-item">
+                        <label for="filtro-data-inicio">Data Início:</label>
+                        <input type="date" id="filtro-data-inicio">
+                    </div>
+                    <div class="filtro-item">
+                        <label for="filtro-data-fim">Data Fim:</label>
+                        <input type="date" id="filtro-data-fim">
+                    </div>
+                    <div class="filtro-item">
+                        <label for="filtro-tipo">Tipo:</label>
+                        <select id="filtro-tipo">
+                            <option value="">Todos</option>
+                            <option value="receita">Receita</option>
+                            <option value="despesa">Despesa</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="botoes-filtro">
+                    <button class="btn-primary">Aplicar Filtros</button>
+                    <button class="btn-secondary">Limpar</button>
+                </div>
+            </div>
+
+            <div class="tabela-container">
+                <table class="tabela-dados">
+                    <thead>
+                        <tr>
+                            <th class="sortable sort-desc" data-sort="data">Data</th>
+                            <th>Descrição</th>
+                            <th class="sortable" data-sort="tipo">Tipo</th>
+                            <th class="sortable" data-sort="valor">Valor</th>
+                            <th>Categoria</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>2025-10-15</td>
+                            <td>Aluguel</td>
+                            <td class="tipo-despesa">Despesa</td>
+                            <td>R$ 1.800,00</td>
+                            <td>Moradia</td>
+                            <td>
+                                <button class="btn-editar">Editar</button>
+                                <button class="btn-remover">Remover</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2025-10-05</td>
+                            <td>Salário</td>
+                            <td class="tipo-receita">Receita</td>
+                            <td>R$ 5.000,00</td>
+                            <td>Trabalho</td>
+                            <td>
+                                <button class="btn-editar">Editar</button>
+                                <button class="btn-remover">Remover</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="pendentes" class="aba-conteudo oculto">
+            <h2>Contas Pendentes (A Vencer)</h2>
+
+            <div class="filtro-container">
+                <div class="filtro-group">
+                    <div class="filtro-item">
+                        <label for="filtro-pendente-tipo">Tipo:</label>
+                        <select id="filtro-pendente-tipo">
+                            <option value="">Todos</option>
+                            <option value="receita">Receita</option>
+                            <option value="despesa">Despesa</option>
+                        </select>
+                    </div>
+                    <div class="filtro-item">
+                        <label for="filtro-pendente-status">Status:</label>
+                        <select id="filtro-pendente-status">
+                            <option value="">Todos</option>
+                            <option value="vencido">Vencido</option>
+                            <option value="alerta">Vence Hoje/Próximo</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="botoes-filtro">
+                    <button class="btn-primary">Filtrar</button>
+                    <button class="btn-secondary">Limpar</button>
+                </div>
+            </div>
+
+            <div class="pendentes-legenda">
+                <div class="legenda-item">
+                    <span class="legenda-cor vencida"></span> Vencida
+                </div>
+                <div class="legenda-item">
+                    <span class="legenda-cor vencendo"></span> Vence Hoje
+                </div>
+                <div class="legenda-item">
+                    <span class="legenda-cor a-vencer"></span> Próximo (7 dias)
+                </div>
+                <div class="legenda-item">
+                    <span class="legenda-cor confirmada"></span> Ação: Pagar/Confirmar
+                </div>
+                <div class="legenda-item">
+                    <span class="legenda-cor remover"></span> Ação: Remover
+                </div>
+                <div class="legenda-item">
+                    <span class="legenda-cor editar"></span> Ação: Editar
+                </div>
+            </div>
+
+            <div class="pendentes-cards-container">
+                <div class="pendente-card vencido">
+                    <div class="pendente-header">
+                        <span class="pendente-valor">R$ 550,00</span>
+                        <span class="tipo-despesa">Despesa</span>
+                    </div>
+                    <p class="pendente-descricao">Cartão de Crédito</p>
+                    <div class="pendente-meta">Vencimento: <span style="font-style: italic;">Há 3 dias (2025-10-15)</span></div>
+                    <div class="pendente-acoes">
+                        <button class="btn-confirmar">Pagar/Confirmar</button>
+                        <button class="btn-editar">Editar</button>
+                        <button class="btn-remover">Remover</button>
+                    </div>
+                </div>
+
+                <div class="pendente-card alerta-vencimento">
+                    <div class="pendente-header">
+                        <span class="pendente-valor">R$ 120,00</span>
+                        <span class="tipo-despesa">Despesa</span>
+                    </div>
+                    <p class="pendente-descricao">Conta de Luz</p>
+                    <div class="pendente-meta">Vencimento: <span>HOJE (2025-10-18)</span></div>
+                    <div class="pendente-acoes">
+                        <button class="btn-confirmar">Pagar/Confirmar</button>
+                        <button class="btn-editar">Editar</button>
+                        <button class="btn-remover">Remover</button>
+                    </div>
+                </div>
+
+                <div class="pendente-card proximo-vencimento">
+                    <div class="pendente-header">
+                        <span class="pendente-valor">R$ 80,00</span>
+                        <span class="tipo-receita">Receita</span>
+                    </div>
+                    <p class="pendente-descricao">Reembolso</p>
+                    <div class="pendente-meta">Vencimento: <span>2025-10-23</span></div>
+                    <div class="pendente-acoes">
+                        <button class="btn-confirmar">Confirmar Recebimento</button>
+                        <button class="btn-editar">Editar</button>
+                        <button class="btn-remover">Remover</button>
+                    </div>
+                </div>
+                
+                <div class="pendente-card futuro">
+                    <div class="pendente-header">
+                        <span class="pendente-valor">R$ 300,00</span>
+                        <span class="tipo-despesa">Despesa</span >
+                    </div>
+                    <p class="pendente-descricao">Mensalidade Academia</p>
+                    <div class="pendente-meta">Vencimento: <span>2025-11-05</span></div>
+                    <div class="pendente-acoes">
+                        <button class="btn-confirmar">Pagar/Confirmar</button>
+                        <button class="btn-editar">Editar</button>
+                        <button class="btn-remover">Remover</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="relatorio" class="aba-conteudo oculto">
+            <h2>Relatório de Despesas por Categoria</h2>
+
+            <div class="filtro-mes-relatorio form-group">
+                <label for="filtroMesRelatorio">Mês do Relatório:</label>
+                <select id="filtroMesRelatorio" class="form-control">
+                    <option value="10-2025">Outubro/2025</option>
+                    </select>
+                <button class="btn-primary">Gerar Relatório</button>
+            </div>
+
+            <div class="relatorio-content">
+                <div class="relatorio-grafico grafico-container">
+                    <canvas id="graficoRelatorio"></canvas>
+                </div>
+                
+                <div class="relatorio-tabela-container tabela-container">
+                    <h3>Despesas por Categoria</h3>
+                    <table class="tabela-dados">
+                        <thead>
+                            <tr>
+                                <th>Categoria</th>
+                                <th>Valor Total</th>
+                                <th>%</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelaRelatorioCorpo">
+                            <tr>
+                                <td>Moradia</td>
+                                <td>R$ 1.800,00</td>
+                                <td>40%</td>
+                            </tr>
+                            <tr>
+                                <td>Alimentação</td>
+                                <td>R$ 1.200,00</td>
+                                <td>27%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+    </main>
+    
+    <div id="modalEdicao" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Editar Lançamento</h2>
+            </div>
+    </div>
+    
+    <script>
+        // Lógica para controle das abas (MUITO importante para o layout)
+        document.querySelectorAll('.tab-button').forEach(button => {
+            button.addEventListener('click', (e) => {
+                // Remove 'ativa' de todos os botões e 'oculto' de todos os conteúdos
+                document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('ativa'));
+                document.querySelectorAll('.aba-conteudo').forEach(content => content.classList.add('oculto'));
+
+                // Adiciona 'ativa' ao botão clicado
+                e.target.classList.add('ativa');
+
+                // Exibe o conteúdo da aba
+                const tabId = e.target.getAttribute('data-tab');
+                document.getElementById(tabId).classList.remove('oculto');
+            });
+        });
+        
+        // ** GARANTA que este script JS está funcionando **. Se as abas não estiverem
+        // sendo trocadas corretamente, o conteúdo da tela parecerá "quebrado" ou vazio.
+    </script>
+</body>
+</html>

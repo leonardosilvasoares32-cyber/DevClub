@@ -1,0 +1,91 @@
+/* PSEUDO ELEMENTOS
+    - São utilizados para estilizar partes específicas de um elemento HTML.
+    - Sintaxe: elemento::pseudo-elemento { propriedades }
+    - Exemplos comuns: ::before, ::after, ::placeholder
+    OUTRO EXEMPLO: input::placeholder { color: red; font-size: 20px; font-weight: bold; font-style: italic; } - AQUI ESTILIZA O TEXTO DO PLACEHOLDER 
+    DE UM CAMPO DE INPUT.
+
+*/
+
+
+
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+input{
+    border: 2px solid #df0808;
+    color: blue;
+    border-radius: 10px;
+    padding: 10px;
+    font-size: 18px;
+    width: 300px;
+    padding: 10px;
+    margin-top: 10px;
+    margin-left: 10px;
+}
+input::placeholder{
+    color: red;
+    font-size: 20px;
+    font-weight: bold;
+    font-style: italic;
+}
+
+P{
+    color: green; ;
+}
+p::first-letter{
+    font-size: 30px;
+    color: orange;
+    font-weight: bold;
+}
+#p2::first-line{
+    color: purple;
+    
+}
+
+
+#a1::before{
+    content: " 😜​ ";
+    font-size: 50px;
+    
+}
+
+#a2::after{
+    content: "🪜​ ";
+    font-size: 50px;
+}
+/* 
+    tipos de pseudo elementos:
+
+            ::before - Adiciona conteúdo antes do conteúdo de um elemento.
+            ::after - Adiciona conteúdo após o conteúdo de um elemento.
+            ::first-letter - Estiliza a primeira letra de um bloco de texto.
+            ::first-line - Estiliza a primeira linha de um bloco de texto.
+            ::placeholder - Estiliza o texto do placeholder em campos de formulário.
+            ::selection - Estiliza o texto selecionado pelo usuário.
+            ::marker - Estiliza os marcadores de listas (como bullets ou números).
+            ::backdrop - Estiliza o fundo de elementos modais ou pop-ups.
+            ::cue - Estiliza legendas em vídeos.
+            ::part() - Permite estilizar partes específicas de elementos Shadow DOM.
+            ::slotted() - Permite estilizar elementos que são inseridos em slots de Shadow DOM.
+            ::file-selector-button - Estiliza o botão de seleção de arquivos em inputs do tipo file.
+            ::grammar-error - Estiliza texto que o navegador identifica como erro gramatical.
+            ::spelling-error - Estiliza texto que o navegador identifica como erro ortográfico.
+            ::target-text - Estiliza o texto que é alvo de uma âncora (link).
+            ::cue-region - Estiliza a região onde as legendas são exibidas em vídeos.
+            ::placeholder-shown - Aplica estilos a um campo de formulário quando o placeholder está visível.
+            ::part() - Permite estilizar partes específicas de elementos Shadow DOM.
+            ::slotted() - Permite estilizar elementos que são inseridos em slots de Shadow DOM.
+            ::file-selector-button - Estiliza o botão de seleção de arquivos em inputs do tipo file.
+            ::grammar-error - Estiliza texto que o navegador identifica como erro gramatical.
+            ::spelling-error - Estiliza texto que o navegador identifica como erro ortográfico.
+            ::target-text - Estiliza o texto que é alvo de uma âncora (link).
+            ::cue-region - Estiliza a região onde as legendas são exibidas em vídeos.
+            ::placeholder-shown - Aplica estilos a um campo de formulário quando o placeholder está visível.
+
+
+*/
