@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Vendas com Supabase</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+    <header>
+        <h1>Sistema de Vendas & Gestão</h1>
+    </header>
+
+    <nav>
+        <button class="tab-button active" onclick="showTab('vendas')">🛒 Tela de Vendas</button>
+        <button class="tab-button" onclick="showTab('gestao')">📈 Gestão/Relatórios</button>
+        <button class="tab-button" onclick="showTab('cadastros')">🗃️ Cadastros</button>
+    </nav>
+
+    <main>
+        <section id="vendas" class="tab-content active">
+            <h2>Tela de Vendas</h2>
+            <div id="vendedorInfo">Vendedor: <strong>Usuário Teste</strong> | Empresa(s): <strong>Carregando...</strong></div>
+
+            <h3>Cliente</h3>
+            <div class="campo-busca">
+                <label for="buscaCliente">Buscar Cliente (CPF/CNPJ ou Razão Social):</label>
+                <input type="text" id="buscaCliente" placeholder="Digite CPF/CNPJ ou nome..." autocomplete="off">
+                <div id="resultadoBusca" class="autocomplete-list"></div>
+            </div>
+            
+            <div id="clienteSelecionadoInfo">
+                <p>Cliente Selecionado: <strong id="clienteNomeDisplay">Nenhum</strong></p>
+                <input type="hidden" id="clienteIdVenda">
+            </div>
+
+            <hr>
+
+            <h3>Itens do Pedido</h3>
+            <div id="adicionarItemForm">
+                <label for="selectEmpresa">Empresa:</label>
+                <select id="selectEmpresa"></select>
+                
+                <label for="selectProduto">Produto:</label>
+                <select id="selectProduto"></select>
+                
+                <label for="inputQuantidade">Quantidade:</label>
+                <input type="number" id="inputQuantidade" min="1" value="1">
+                
+                <label for="inputValorUnitario">Valor Unitário:</label>
+                <input type="number" id="inputValorUnitario" step="0.01" readonly>
+                
+                <button type="button" onclick="adicionarItemAoCarrinho()">Adicionar Item</button>
+            </div>
+
+            <table id="carrinhoTabela">
+                <thead>
+                    <tr>
+                        <th>Produto</th>
+                        <th>Qtde</th>
+                        <th>Valor Unitário</th>
+                        <th>Subtotal</th>
+                        <th>Ação</th>
+                    </tr>
+                </thead>
+                <tbody id="carrinhoBody"></tbody>
+            </table>
+
+            <hr>
+            
+            <div id="totaisVenda">
+                <label for="inputFrete">Frete:</label>
+                <input type="number" id="inputFrete" step="0.01" value="0.00" onchange="calcularTotalVenda()"><br><br>
+                
+                <p>Subtotal: <strong id="subtotalDisplay">R$ 0,00</strong></p>
+                <p>Total da Venda: <strong id="totalVendaDisplay">R$ 0,00</strong></p>
+            </div>
+            
+            <div id="acoesVenda">
+                <button id="btnSalvarEdicao" style="display:none;">Salvar Edição</button>
+                <button id="btnCancelarEdicao" style="display:none;">Cancelar Edição</button>
+                <button id="btnEnviarVenda">Enviar Venda</button>
+                <button id="btnCancelarVenda">Cancelar</button>
+            </div>
+            
+            <div id="modalEnvio" style="display:none;" class="modal-envio">
+                <h4>Pedido N° <span id="vendaIdConfirmacao"></span> Enviado! Deseja enviar cópia para o Cliente?</h4>
+                <input type="checkbox" id="enviaWhatsAppCliente">
+                <label for="enviaWhatsAppCliente">WhatsApp</label>
+                <input type="checkbox" id="enviaEmailCliente">
+                <label for="enviaEmailCliente">Email</label>
+                <button onclick="enviarCopiaCliente()">Confirmar Envio</button>
+                <button onclick="fecharModalEnvio()">Fechar</button>
+                <p id="statusEnvioCliente"></p>
+            </div>
+
+            <p id="statusVendaMensagem"></p>
+        </section>
+
+        <section id="gestao" class="tab-content">
+            <h2>📈 Gestão e Relatórios de Vendas</h2>
+            
+            <div class="card">
+                <h3>💰 Total Geral Vendido</h3>
+                <p id="totalVendidoValor" class="valor-destaque">Carregando...</p>
+            </div>
+
+            <div class="card">
+                <h3>Vendas Recentes (Exemplo de CRUD)</h3>
+                <ul id="listaVendasRecentes"></ul>
+            </div>
+
+            <div class="card chart-container">
+                <h3>🥇 Vendedores Destaques (Total em R$)</h3>
+                <canvas id="quemMaisVendeuChart"></canvas>
+            </div>
+
+            <div class="card chart-container">
+                <h3>📦 Itens Mais Vendidos (em Quantidade)</h3>
+                <canvas id="itensMaisVendidosChart"></canvas>
+            </div>
+        </section>
+
+
+        <section id="cadastros" class="tab-content">
+            <h2>🗃️ Módulo de Cadastros</h2>
+            <div class="cadastros-container">
+                
+                <div class="cadastro-box">
+                    <h3>Cadastro de Vendedores</h3>
+                    <form id="formCadastroVendedor">
+                        <label for="nome">Nome:</label><input type="text" name="nome" id="nome" required>
+                        <label for="cpf_cnpj_vend">CPF/CNPJ:</label><input type="text" name="cpf_cnpj" id="cpf_cnpj_vend" required>
+                        <label for="endereco_vend">Endereço:</label><input type="text" name="endereco" id="endereco_vend">
+                        <label for="email">Email:</label><input type="email" name="email" id="email" required>
+                        <label for="telefone_vend">Telefone:</label><input type="tel" name="telefone" id="telefone_vend">
+                        <hr>
+                        <h3>Permissões (Empresa e Comissão)</h3>
+                        <div id="permissoesVendedor"></div>
+                        <button type="submit">Cadastrar Vendedor</button>
+                        <p id="statusVendedorMensagem"></p>
+                    </form>
+                </div>
+                
+                <div class="cadastro-box">
+                    <h3>Cadastro de Empresas</h3>
+                    <form id="formCadastroEmpresa">
+                        <label for="empresaNome">Nome:</label><input type="text" name="nome" id="empresaNome" required>
+                        <label for="empresaCnpj">CNPJ:</label><input type="text" name="cnpj" id="empresaCnpj" required>
+                        <label for="empresaEndereco">Endereço:</label><input type="text" name="endereco" id="empresaEndereco">
+                        <label for="empresaTelefone">Telefone:</label><input type="tel" name="telefone" id="empresaTelefone">
+                        <label for="empresaEmail">Email:</label><input type="email" name="email" id="empresaEmail">
+                        <h4>Contato do Gestor</h4>
+                        <label for="gerenteNome">Nome Gestor:</label><input type="text" name="nome_gerente" id="gerenteNome">
+                        <label for="gerenteTelefone">Telefone Gestor:</label><input type="tel" name="tel_gerente" id="gerenteTelefone">
+                        <label for="gerenteEmail">Email Gestor:</label><input type="email" name="email_gerente" id="gerenteEmail">
+                        <h4>Classificação</h4>
+                        <input type="checkbox" name="is_industria" id="isIndustria"><label for="isIndustria">Indústria</label>
+                        <input type="checkbox" name="is_atacado" id="isAtacado"><label for="isAtacado">Atacado</label>
+                        <button type="submit">Salvar Empresa</button>
+                        <p id="statusEmpresaMensagem"></p>
+                    </form>
+                    <hr>
+                    <h4>Empresas Cadastradas</h4>
+                    <ul id="listaEmpresasCadastradas"></ul>
+                </div>
+                
+                <div class="cadastro-box">
+                    <h3>Cadastro de Clientes</h3>
+                    <form id="formCadastroClientes">
+                        <label for="clienteCpfCnpj">CPF / CNPJ:</label><input type="text" name="cpf_cnpj" id="clienteCpfCnpj" required placeholder="Apenas números">
+                        <label for="clienteRazaoSocial">Nome / Razão Social:</label><input type="text" name="razao_social" id="clienteRazaoSocial" required>
+                        <label for="clienteEndereco">Endereço:</label><input type="text" name="endereco" id="clienteEndereco">
+                        <label for="clienteEmail">Email:</label><input type="email" name="email" id="clienteEmail">
+                        <label for="clienteTelefone">Telefone:</label><input type="tel" name="telefone" id="clienteTelefone">
+                        <button type="submit">Salvar Cliente</button>
+                        <p id="statusClientesMensagem"></p>
+                    </form>
+                </div>
+            </div>
+
+            <div id="modalCadastroProduto" class="produto-modal" style="display:none;">
+                <h3>Cadastro de Produtos para: <span id="produtoEmpresaNome"></span></h3>
+                <form id="formCadastroProduto">
+                    <input type="hidden" name="produto_empresa_id" id="produtoEmpresaId">
+                    <label for="produtoNome">Nome:</label><input type="text" name="nome" id="produtoNome" required>
+                    <label for="produtoDescricao">Descrição:</label><textarea name="descricao" id="produtoDescricao"></textarea>
+                    <label for="valorUnitario">Valor Unitário:</label><input type="number" step="0.01" min="0" name="valor_unitario" id="valorUnitario" required>
+                    <label for="valorCaixa">Valor da Caixa:</label><input type="number" step="0.01" min="0" name="valor_caixa" id="valorCaixa">
+                    <label for="descontoMaximo">Desconto Máximo (%):</label><input type="number" step="0.01" min="0" max="100" name="desconto_max_percentual" id="descontoMaximo">
+                    <label for="comissaoProduto">Comissão do Produto (%):</label><input type="number" step="0.01" min="0" max="100" name="comissao_produto_percentual" id="comissaoProduto">
+                    <button type="submit">Salvar Produto</button>
+                    <button type="button" onclick="fecharCadastroProduto()">Cancelar</button>
+                    <p id="statusProdutoMensagem"></p>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>
