@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDV - Ponto de Venda Rápido</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <style>
+        /* ====================================================================
+           ESTILOS DO LAYOUT PDV
+           ==================================================================== */
+        :root {
+            --cor-principal: #52c41a; /* Verde para destacar a função de venda */
+            --cor-secundaria: #f0f2f5;
+            --cor-fundo: #ffffff;
+            --cor-texto: #333;
+            --cor-borda: #d9d9d9;
+        }
+
+        body { font-family: sans-serif; margin: 0; background-color: var(--cor-secundaria); color: var(--cor-texto); }
+        .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+        
+        .header-nav {
+            background-color: var(--cor-principal);
+            color: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+        .header-nav h1 { margin: 0; font-size: 24px; }
+        
+        /* Layout de Vendas (Formulário + Carrinho) */
+        .layout-vendas {
+            display: grid;
+            grid-template-columns: 2fr 1fr; 
+            gap: 30px;
+        }
+        .secao-vendas, .secao-carrinho {
+            padding: 20px;
+            background-color: var(--cor-fundo);
+            border-radius: 8px;
+            box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
+        }
+        
+        /* Carrinho */
+        #listaCarrinho { list-style: none; padding: 0; }
+        #listaCarrinho li { padding: 10px 0; border-bottom: 1px dashed var(--cor-borda); display: flex; justify-content: space-between; align-items: center; }
+        .totais-venda { margin-top: 20px; padding-top: 15px; border-top: 2px solid var(--cor-borda); }
+        .totais-venda strong { font-size: 1.2em; color: var(--cor-principal); }
+        
+        /* Formulários e Autocomplete (UX) */
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: 500; }
+        input[type="text"], input[type="number"], input[type="email"] { width: 100%; padding: 10px; border: 1px solid var(--cor-borda); border-radius: 4px; box-sizing: border-box; font-size: 14px; }
+        .layout-produto { display: grid; grid-template-columns: 3fr 1fr 1fr 1fr; gap: 10px; align-items: end; }
+        
+        /* Botões */
+        button { padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; font-weight: 600; transition: background-color 0.3s; }
+        .btn-primary { background-color: #52c41a; color: white; }
+        .btn-secondary { background-color: #f7f7f7; color: var(--cor-texto); border: 1px solid var(--cor-borda); }
+        .btn-danger { background-color: #ff4d4f; color: white; }
+        
+        /* Autocomplete List */
+        .autocomplete-container { position: relative; }
+        .autocomplete-list { position: absolute; z-index: 10; width: 100%; max-height: 200px; overflow-y: auto; background: white; border: 1px solid #ccc; border-top: none; list-style: none; padding: 0; margin: 0; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .autocomplete-list li { padding: 10px; cursor: pointer; border-bottom: 1px solid #eee; }
+        .autocomplete-list li:hover { background-color: var(--cor-secundaria); }
+        
+        /* Modal */
+        .modal-ux { display: flex; justify-content: center; align-items: center; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.4); }
+        .modal-content-ux { background-color: #fefefe; margin: auto; padding: 30px; border: 1px solid #888; width: 80%; max-width: 500px; border-radius: 10px; position: relative; }
+        .close-button-ux { color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header-nav">
+            <h1>PDV Rápido</h1>
+            <div id="infoVendedor" class="info-vendedor">Aguardando sessão...</div>
+            <button id="btnLogout" class="btn-danger">Sair</button>
+        </div>
+        
+        <div id="conteudo-vendas" class="conteudo-principal active" style="padding: 20px;">
+            <h2>Nova Venda</h2>
+            
+            <div class="layout-vendas">
+                
+                <div class="secao-vendas">
+                    <form id="formVenda">
+                        <h3>1. Cliente</h3>
+                        <div class="form-group autocomplete-container">
+                            <label for="inputCliente">Cliente (CNPJ ou Razão Social):</label>
+                            <input type="text" id="inputCliente" required placeholder="Digite para buscar ou Cadastrar Novo">
+                            <input type="hidden" id="inputClienteId">
+                            <ul id="clienteSugestoes" class="autocomplete-list"></ul>
+                        </div>
+                        <p id="statusClienteSelecionado" style="font-weight: bold; margin-top: 5px;">Aguardando seleção do cliente...</p>
+
+                        <h3>2. Produto</h3>
+                        <div class="layout-produto">
+                            <div class="form-group autocomplete-container">
+                                <label for="inputProduto">Produto:</label>
+                                <input type="text" id="inputProduto" placeholder="Digite para buscar..." disabled>
+                                <input type="hidden" id="inputProdutoId">
+                                <input type="hidden" id="inputValorUnitarioBase">
+                                <ul id="produtoSugestoes" class="autocomplete-list"></ul>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="inputQuantidade">Quantidade:</label>
+                                <input type="number" id="inputQuantidade" value="1" min="1">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="inputDesconto">Desconto (%):</label>
+                                <input type="number" id="inputDesconto" value="0.00" min="0" max="100">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>&nbsp;</label>
+                                <button type="button" id="btnAdicionarProduto" class="btn-secondary" disabled>
+                                    Adicionar
+                                </button>
+                            </div>
+                        </div>
+
+                        <h3>3. Detalhes</h3>
+                         <div class="form-group">
+                            <label for="inputFrete">Valor do Frete (R$):</label>
+                            <input type="number" id="inputFrete" value="0.00" min="0">
+                        </div>
+                    </form>
+                </div>
+                
+                <div class="secao-carrinho">
+                    <h3>Carrinho</h3>
+                    <ul id="listaCarrinho">
+                        <li>Carrinho vazio. Adicione um produto.</li>
+                    </ul>
+
+                    <div class="totais-venda">
+                        <div>Subtotal: <span id="subtotalValor">R$ 0,00</span></div>
+                        <div>Frete: R$ <span id="freteValorDisplay">0,00</span></div>
+                        <hr>
+                        <div><strong>Total Geral:</strong> <strong id="totalGeralValor">R$ 0,00</strong></div>
+                    </div>
+                    
+                    <div style="margin-top: 20px;">
+                         <button type="submit" form="formVenda" class="btn-primary" style="width: 100%;">
+                            FINALIZAR VENDA & ENVIAR WHATSAPP
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="modalCadastroCliente" class="modal-ux" style="display: none;">
+        <div class="modal-content-ux">
+            <span class="close-button-ux" onclick="fecharModalCadastro()">&times;</span>
+            <h3>Cadastro Rápido de Cliente</h3>
+            <form id="formCadastroRapidoCliente">
+                <div class="form-group"><label for="inputClienteModalRazaoSocial">Razão Social:</label><input type="text" id="inputClienteModalRazaoSocial" required></div>
+                <div class="form-group"><label for="inputClienteModalCnpj">CNPJ (Opcional):</label><input type="text" id="inputClienteModalCnpj"></div>
+                <div class="form-group"><label for="inputClienteModalEmail">Email:</label><input type="email" id="inputClienteModalEmail"></div>
+                <div class="form-group"><label for="inputClienteModalTelefone">Telefone (Para WhatsApp):</label><input type="text" id="inputClienteModalTelefone" required></div>
+                <button type="submit" class="btn-primary">Salvar e Selecionar</button>
+            </form>
+        </div>
+    </div>
+
+    <script type="module" src="js/core.js"></script>
+    <script type="module" src="js/vendas-pdv.js"></script> 
+    
+    <script type="module">
+        // Importa o necessário do core.js
+        import { 
+            SUPABASE_URL, 
+            SUPABASE_ANON_KEY, 
+            setSupabaseClient,
+            supabase, // Cliente (null inicialmente)
+            carregarPerfilVendedor 
+        } from './js/core.js';
+        
+        // Importa a função principal do módulo PDV
+        import { initVendasPDV } from './js/vendas-pdv.js'; 
+
+        // =========================================================
+        // LÓGICA DE INICIALIZAÇÃO E PERMISSÃO
+        // =========================================================
+        function inicializarSupabaseClient() {
+            if (typeof window.supabase !== 'undefined') {
+                const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                setSupabaseClient(client);
+
+                // Continua o processo de verificação de autenticação
+                checkAuthAndInit(client);
+            } else {
+                console.error("ERRO GRAVE: Biblioteca Supabase não carregada.");
+                document.getElementById('infoVendedor').textContent = 'Erro de carregamento.';
+            }
+        }
+        
+        async function checkAuthAndInit(client) {
+            const { data: { session } } = await client.auth.getSession();
+            
+            if (!session) {
+                window.location.href = 'index.html'; // Redireciona se não houver sessão
+                return;
+            }
+
+            const perfil = await carregarPerfilVendedor(session.user.id);
+            const nivel = perfil?.nivel_acesso;
+
+            if (nivel === 'admin') {
+                // Admins podem usar o PDV, mas o correto é o AdminMain
+                document.getElementById('infoVendedor').innerHTML = `Logado: ${perfil.empresa_nome} (Admin)`;
+            } else if (nivel === 'usuario') {
+                document.getElementById('infoVendedor').innerHTML = `Logado: ${perfil.empresa_nome} (Vendedor)`;
+            } else {
+                // Usuário sem perfil associado (sem empresa)
+                 document.getElementById('infoVendedor').textContent = 'Perfil incompleto. Associar a uma empresa.';
+                 // Pode redirecionar ou mostrar uma tela de erro.
+                 return;
+            }
+            
+            // Inicializa a lógica de Vendas PDV (Busca, Carrinho, etc.)
+            initVendasPDV();
+        }
+
+        // Listener de Logout
+        document.getElementById('btnLogout')?.addEventListener('click', async () => {
+            if (supabase) await supabase.auth.signOut();
+            window.location.href = 'index.html';
+        });
+
+        // Executa a inicialização no carregamento
+        document.addEventListener('DOMContentLoaded', inicializarSupabaseClient);
+    </script>
+</body>
+</html>

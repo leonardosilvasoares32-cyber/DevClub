@@ -1,16 +1,31 @@
-// js/core.js - Módulo central de comunicação e estado
+// js/core.js - Módulo central de comunicação e estado (CORRIGIDO)
 
-const SUPABASE_URL = 'SUA_URL_SUPABASE_AQUI'; // *ATUALIZE SUA URL*
-const SUPABASE_ANON_KEY = 'SUA_CHAVE_ANON_AQUI'; // *ATUALIZE SUA CHAVE*
+// Linha 1: Importa a função createClient diretamente da URL da CDN.
+// Isso garante que a função 'createClient' esteja disponível no escopo do módulo.
+// import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'; 
 
-export const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const SUPABASE_URL = 'https://sbfxtoxykwtxiecibkcm.supabase.co'; // *ATUALIZE SUA URL*
+const SUPABASE_ANON_KEY = 'sb_publishable_85uPynUTx9KKCCSYBsdwIg_cXEXzt0f'; // *ATUALIZE SUA CHAVE*
+
+
+// Exporta as chaves
+export { SUPABASE_URL, SUPABASE_ANON_KEY };
+
+// Variável que será preenchida (será NULL até a inicialização no HTML)
+export let supabase = null; 
+
+// Função que será chamada pelo HTML para injetar o cliente inicializado
+export function setSupabaseClient(client) {
+    supabase = client;
+    console.log("Supabase Client injetado no core.js com sucesso.");
+}
+
 
 // Variáveis de Estado Global
 let vendedorLogado = null; 
 let empresaLogada = null;
-let nivelAcesso = 'publico'; // 'publico', 'usuario', 'admin'
+let nivelAcesso = 'publico'; 
 
-// Exporta as variáveis de estado
 export { vendedorLogado, empresaLogada, nivelAcesso };
 
 // Setters (Para serem usados pelos módulos que leem o perfil)
@@ -20,26 +35,27 @@ export function setNivelAcesso(nivel) { nivelAcesso = nivel; }
 
 
 // ====================================================================
-// FUNÇÃO CENTRAL DE PERFIL
+// FUNÇÃO CENTRAL DE PERFIL (Mantida, mas agora usa a variável 'supabase')
 // ====================================================================
 
-/**
- * Carrega o perfil do vendedor (ID, Empresa e Nível de Acesso) após o login.
- * Usa a VIEW que criamos no BD para resolver a ambiguidade.
- */
 export async function carregarPerfilVendedor(user_id) {
+    if (!supabase) {
+        console.error("Supabase não inicializado ao carregar perfil.");
+        return null;
+    }
+    
     const { data, error } = await supabase
         .from('vendedor_empresa_view') 
         .select('empresa_id_fk, empresa_nome, nivel_acesso')
         .eq('vendedor_id', user_id)
         .single();
 
+    // ... (lógica de tratamento de erro) ...
     if (error && error.code === 'PGRST116') {
         console.warn('Vendedor não associado ou perfil incompleto.');
         setVendedorLogado(user_id);
-        setEmpresaLogada(null);
-        setNivelAcesso('usuario'); // Acesso padrão de quem só tem login
-        return null;
+        setNivelAcesso('usuario');
+        return { nivel_acesso: 'usuario' }; 
     }
 
     if (error) {

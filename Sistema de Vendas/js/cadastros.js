@@ -1,17 +1,6 @@
-// js/cadastros.js
+// js/cadastros.js - Módulo CRUD do Dashboard Administrativo
 
-import { supabase, VENDEDOR_ID_LOGADO, empresaLogada, carregarEmpresaVendedor } from './main.js';
-
-// ====================================================================
-// Variáveis e Helpers
-// ====================================================================
-
-function formatarMoeda(valor) {
-    const valorNumerico = parseFloat(valor);
-    if (isNaN(valorNumerico)) return 'R$ 0,00';
-    
-    return valorNumerico.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-}
+import { supabase, empresaLogada, setEmpresaLogada, formatarMoeda } from './core.js';
 
 // ====================================================================
 // 1. LÓGICA DAS SUB-ABAS DE CADASTRO
@@ -41,7 +30,7 @@ function mostrarConteudoSubAba(alvo) {
 }
 
 // ====================================================================
-// 2. CRUD DE CLIENTES
+// 2. CRUD DE CLIENTES (ATUALIZADO com Email e Telefone)
 // ====================================================================
 
 async function salvarCliente(e) {
@@ -49,8 +38,10 @@ async function salvarCliente(e) {
     const id = document.getElementById('inputClienteId').value;
     const razao_social = document.getElementById('inputClienteRazaoSocial').value;
     const cnpj = document.getElementById('inputClienteCnpj').value;
+    const email = document.getElementById('inputClienteEmail').value;       // NOVO CAMPO
+    const telefone = document.getElementById('inputClienteTelefone').value; // NOVO CAMPO
 
-    const dadosCliente = { razao_social, cnpj };
+    const dadosCliente = { razao_social, cnpj, email, telefone };
 
     if (id) {
         // Atualização
@@ -69,7 +60,8 @@ async function salvarCliente(e) {
 }
 
 async function carregarListaClientes() {
-    const { data, error } = await supabase.from('clientes').select('id, razao_social, cnpj').order('razao_social', { ascending: true });
+    // Agora selecionamos também email e telefone
+    const { data, error } = await supabase.from('clientes').select('id, razao_social, cnpj, email, telefone').order('razao_social', { ascending: true });
         
     if (error) { console.error('Erro ao carregar lista de clientes:', error); return; }
 
@@ -81,7 +73,7 @@ async function carregarListaClientes() {
             <td>${cliente.razao_social}</td>
             <td>${cliente.cnpj || 'N/A'}</td>
             <td>
-                <button class="btn-secondary" onclick="preencherFormularioCliente('${cliente.id}', '${cliente.razao_social}', '${cliente.cnpj || ''}')">Editar</button>
+                <button class="btn-secondary" onclick="preencherFormularioCliente('${cliente.id}', '${cliente.razao_social}', '${cliente.cnpj || ''}', '${cliente.email || ''}', '${cliente.telefone || ''}')">Editar</button>
                 <button class="btn-danger" onclick="deletarCliente('${cliente.id}')">Excluir</button>
             </td>
         `;
@@ -89,10 +81,12 @@ async function carregarListaClientes() {
     });
 }
 
-function preencherFormularioCliente(id, razao_social, cnpj) {
+function preencherFormularioCliente(id, razao_social, cnpj, email, telefone) {
     document.getElementById('inputClienteId').value = id;
     document.getElementById('inputClienteRazaoSocial').value = razao_social;
     document.getElementById('inputClienteCnpj').value = cnpj;
+    document.getElementById('inputClienteEmail').value = email;
+    document.getElementById('inputClienteTelefone').value = telefone;
 }
 
 async function deletarCliente(id) {
@@ -104,7 +98,7 @@ async function deletarCliente(id) {
 
 
 // ====================================================================
-// 3. CRUD DE EMPRESAS
+// 3. CRUD DE EMPRESAS (MANTIDO)
 // ====================================================================
 
 async function salvarEmpresa(e) {
@@ -116,12 +110,10 @@ async function salvarEmpresa(e) {
     const dadosEmpresa = { nome, cnpj };
 
     if (id) {
-        // Atualização
         const { error } = await supabase.from('empresas').update(dadosEmpresa).eq('id', id);
         if (error) { console.error('Erro ao atualizar empresa:', error); alert('Erro ao atualizar empresa.'); } 
         else { alert('Empresa atualizada com sucesso!'); }
     } else {
-        // Inserção
         const { error } = await supabase.from('empresas').insert([dadosEmpresa]);
         if (error) { console.error('Erro ao salvar empresa:', error); alert('Erro ao salvar empresa.'); } 
         else { alert('Empresa salva com sucesso!'); }
@@ -129,8 +121,6 @@ async function salvarEmpresa(e) {
     document.getElementById('formEmpresa').reset();
     document.getElementById('inputEmpresaId').value = '';
     carregarListaEmpresas();
-    // Recarrega info do vendedor caso a empresa logada tenha sido editada/criada
-    carregarEmpresaVendedor(); 
 }
 
 async function carregarListaEmpresas() {
@@ -169,52 +159,52 @@ async function deletarEmpresa(id) {
 
 
 // ====================================================================
-// 4. ASSOCIAÇÃO DE VENDEDORES
+// 4. ASSOCIAÇÃO DE VENDEDORES (ATUALIZADO com UID e Nível de Acesso)
 // ====================================================================
 
 async function salvarVendedor(e) {
     e.preventDefault();
+    
+    // Novos campos no Admin:
+    const vendedorId = document.getElementById('inputVendedorId').value; // UID do Auth
+    const empresaId = document.getElementById('inputVendedorEmpresaId').value; // ID da Empresa
+    const comissao = parseFloat(document.getElementById('inputVendedorComissao').value);
+    const nivel = document.getElementById('inputVendedorNivel').value; // Nível de Acesso
 
-    if (!empresaLogada) {
-        alert('É necessário ter uma Empresa Logada (cadastrada) para associar um vendedor.');
+    // Validação básica
+    if (!vendedorId || !empresaId || isNaN(comissao)) {
+        alert('Preencha todos os campos corretamente (ID do Vendedor, ID da Empresa e Comissão).');
         return;
     }
-
-    const email = document.getElementById('inputVendedorEmail').value;
-    const comissao = parseFloat(document.getElementById('inputVendedorComissao').value);
     
-    // Usamos o ID fixo para simular o vendedor logado
-    const vendedorIdParaAssociar = VENDEDOR_ID_LOGADO; 
-    
-    // Verifica se já existe uma associação para evitar duplicatas (e faz UPDATE se necessário)
+    // Verifica se já existe uma associação para fazer UPDATE
     const { data: existente, error: checkError } = await supabase
         .from('vendedor_empresa_comissao')
         .select('id')
-        .eq('vendedor_id', vendedorIdParaAssociar)
-        .eq('empresa_id', empresaLogada)
+        .eq('vendedor_id', vendedorId)
         .single();
     
-    if (checkError && checkError.code !== 'PGRST116') { // Ignora o erro 'no rows found'
+    if (checkError && checkError.code !== 'PGRST116') { 
         console.error('Erro ao verificar associação existente:', checkError);
         return;
     }
 
     const dadosAssociacao = {
-        vendedor_id: vendedorIdParaAssociar,
-        empresa_id: empresaLogada,
+        vendedor_id: vendedorId,
+        empresa_id: empresaId,
         comissao_percentual: comissao,
-        email_referencia: email // Novo campo para facilitar a visualização
+        nivel_acesso: nivel // NOVO CAMPO
     };
 
     if (existente) {
-        // Atualiza a comissão/email
+        // Atualiza a associação
         const { error: updateError } = await supabase
             .from('vendedor_empresa_comissao')
             .update(dadosAssociacao)
             .eq('id', existente.id);
             
-        if (updateError) { console.error('Erro ao atualizar comissão:', updateError); alert('Erro ao atualizar comissão.'); } 
-        else { alert(`Comissão do vendedor atualizada com sucesso para ${email}!`); }
+        if (updateError) { console.error('Erro ao atualizar associação:', updateError); alert('Erro ao atualizar associação.'); } 
+        else { alert(`Associação e Nível de Acesso (${nivel}) atualizados com sucesso!`); }
 
     } else {
         // Insere nova associação
@@ -223,19 +213,18 @@ async function salvarVendedor(e) {
             .insert([dadosAssociacao]);
             
         if (insertError) { console.error('Erro ao associar vendedor:', insertError); alert('Erro ao associar vendedor.'); } 
-        else { alert(`Vendedor ${email} associado à empresa com sucesso!`); }
+        else { alert(`Vendedor ${vendedorId.substring(0, 8)}... associado com sucesso!`); }
     }
     
     document.getElementById('formVendedor').reset();
     carregarListaVendedores();
-    carregarEmpresaVendedor(); // Recarrega a informação no cabeçalho
 }
 
 async function carregarListaVendedores() {
-    // Usamos a mesma VIEW para evitar problemas de ambiguidade
+    // Usamos a VIEW para buscar os dados de forma consolidada, incluindo o Nível
     const { data, error } = await supabase
         .from('vendedor_empresa_view') 
-        .select('vendedor_id, empresa_nome, comissao_percentual, email_referencia')
+        .select('vendedor_id, empresa_nome, comissao_percentual, nivel_acesso') // Seleciona Nível
         .order('empresa_nome', { ascending: true });
         
     if (error) { console.error('Erro ao carregar lista de vendedores:', error); return; }
@@ -246,8 +235,8 @@ async function carregarListaVendedores() {
         const tr = document.createElement('tr');
         tr.innerHTML = `
             <td>${vendedor.vendedor_id.substring(0, 8)}...</td>
-            <td>${vendedor.email_referencia || 'N/A'}</td>
-            <td>${vendedor.comissao_percentual}% (${vendedor.empresa_nome})</td>
+            <td>${vendedor.empresa_nome}</td>
+            <td>${vendedor.nivel_acesso.toUpperCase()}</td>
             <td>
                 <button class="btn-danger" onclick="deletarAssociacaoVendedor('${vendedor.vendedor_id}')">Excluir</button>
             </td>
@@ -257,22 +246,21 @@ async function carregarListaVendedores() {
 }
 
 async function deletarAssociacaoVendedor(vendedor_id) {
-    if (!confirm('Tem certeza que deseja desassociar este vendedor?')) return;
+    if (!confirm('Tem certeza que deseja desassociar este vendedor e remover suas permissões?')) return;
     
-    // A desassociação deve ser feita na tabela original
+    // A exclusão é feita na tabela original
     const { error } = await supabase
         .from('vendedor_empresa_comissao')
         .delete()
-        .eq('vendedor_id', vendedor_id)
-        .eq('empresa_id', empresaLogada); // Adicionamos a empresaLogada para restringir o RLS, se aplicável
+        .eq('vendedor_id', vendedor_id); 
 
     if (error) { console.error('Erro ao desassociar vendedor:', error); alert('Erro ao desassociar vendedor.'); } 
-    else { alert('Vendedor desassociado com sucesso!'); carregarListaVendedores(); carregarEmpresaVendedor(); }
+    else { alert('Vendedor desassociado com sucesso!'); carregarListaVendedores(); }
 }
 
 
 // ====================================================================
-// 5. CRUD DE PRODUTOS
+// 5. CRUD DE PRODUTOS (MANTIDO)
 // ====================================================================
 
 async function salvarProduto(e) {
@@ -304,7 +292,7 @@ async function salvarProduto(e) {
 
 async function carregarListaProdutos() {
     if (!empresaLogada) {
-        document.getElementById('produtosLista').innerHTML = '<tr><td colspan="3">Vendedor sem empresa associada.</td></tr>';
+        document.getElementById('produtosLista').innerHTML = '<tr><td colspan="3">Nenhuma empresa logada.</td></tr>';
         return;
     }
     
@@ -343,6 +331,7 @@ async function deletarProduto(id) {
     if (error) { console.error('Erro ao excluir produto:', error); alert('Erro ao excluir produto.'); } 
     else { alert('Produto excluído com sucesso!'); carregarListaProdutos(); }
 }
+
 
 // ====================================================================
 // 6. INICIALIZAÇÃO DO MÓDULO

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administrativo - Gestão de Cadastros</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <style>
+        /* ... (Copie seus estilos do admin.html anterior para cá) ... */
+        :root {
+            --cor-principal: #1677ff; 
+            --cor-secundaria: #f0f2f5;
+            /* ... */
+        }
+        body { /* ... */ }
+        .container { /* ... */ }
+        .header-nav { /* ... */ }
+        .abas-principais { /* ... */ }
+        /* ... (Estilos de formulário, tabela, etc.) ... */
+    </style>
+</head>
+<body>
+    <div class="container">
+        
+        <div class="header-nav">
+            <h1>Dashboard Administrador</h1>
+            <div id="infoVendedor" style="font-size: 14px;">Aguardando permissão...</div>
+            <button id="btnLogout" class="btn-danger">Sair</button>
+        </div>
+        
+        <div class="abas-principais">
+            <button class="aba active" data-aba="cadastros">Cadastros</button>
+            <button class="aba" data-aba="relatorios">Relatórios</button>
+        </div>
+
+        <div id="conteudo-cadastros" class="conteudo-principal active">
+            <h2>Gestão de Cadastros</h2>
+            
+            <div class="sub-abas">
+                <button class="sub-aba active" data-alvo="clientes">Clientes</button>
+                <button class="sub-aba" data-alvo="empresas">Empresas</button>
+                <button class="sub-aba" data-alvo="vendedores">Vendedores</button>
+                <button class="sub-aba" data-alvo="produtos">Produtos</button>
+            </div>
+            
+            <div id="conteudo-clientes" class="conteudo-cadastro">
+                <div class="layout-cadastro">
+                    </div>
+            </div>
+            </div>
+
+        <div id="conteudo-relatorios" class="conteudo-principal" style="display: none;">
+            <h2>Módulo de Relatórios</h2>
+            <p>Em desenvolvimento...</p>
+        </div>
+    </div>
+    
+    <script type="module" src="js/core.js"></script>
+    <script type="module" src="js/admin-main.js"></script>
+    <script type="module" src="js/cadastros.js"></script>
+    
+    <script type="module">
+        // Importa o necessário do core.js
+        import { 
+            SUPABASE_URL, 
+            SUPABASE_ANON_KEY, 
+            setSupabaseClient,
+            supabase, // Cliente (null inicialmente)
+            carregarPerfilVendedor 
+        } from './js/core.js';
+        
+        // Importa a função principal do controlador administrativo
+        import { initAdminMain } from './js/admin-main.js'; 
+
+        // =========================================================
+        // LÓGICA DE INICIALIZAÇÃO E PERMISSÃO
+        // =========================================================
+        function inicializarSupabaseClient() {
+            if (typeof window.supabase !== 'undefined') {
+                const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                setSupabaseClient(client);
+
+                // Continua o processo de verificação de autenticação e permissão
+                checkAuthAndInit(client);
+            } else {
+                console.error("ERRO GRAVE: Biblioteca Supabase não carregada.");
+                document.getElementById('infoVendedor').textContent = 'Erro de carregamento.';
+            }
+        }
+        
+        async function checkAuthAndInit(client) {
+            const { data: { session } } = await client.auth.getSession();
+            
+            if (!session) {
+                window.location.href = 'index.html'; // Redireciona se não houver sessão
+                return;
+            }
+
+            const perfil = await carregarPerfilVendedor(session.user.id);
+            const nivel = perfil?.nivel_acesso;
+
+            if (nivel === 'admin') {
+                // Acesso permitido: inicializa o módulo principal do Admin
+                initAdminMain(perfil); 
+            } else {
+                // Permissão negada
+                alert('Acesso negado. Você não tem permissão de Administrador.');
+                window.location.href = 'vendas.html'; // Envia para o PDV ou para o login
+            }
+        }
+
+        // Listener de Logout
+        document.getElementById('btnLogout')?.addEventListener('click', async () => {
+            if (supabase) await supabase.auth.signOut();
+            window.location.href = 'index.html';
+        });
+
+        // Executa a inicialização no carregamento
+        document.addEventListener('DOMContentLoaded', inicializarSupabaseClient);
+    </script>
+</body>
+</html>
