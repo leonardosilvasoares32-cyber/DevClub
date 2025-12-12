@@ -3,203 +3,558 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Vendas com Supabase</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Sistema de Vendas Supabase</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        /* ====================================================================
+           ESTILOS GLOBAIS E LAYOUT PRINCIPAL
+           ==================================================================== */
+        :root {
+            --cor-principal: #1677ff; /* Azul da Supabase */
+            --cor-secundaria: #f0f2f5;
+            --cor-fundo: #ffffff;
+            --cor-texto: #333;
+            --cor-borda: #d9d9d9;
+            --cor-sucesso: #52c41a;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            margin: 0;
+            background-color: var(--cor-secundaria);
+            color: var(--cor-texto);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: var(--cor-fundo);
+            box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        /* ====================================================================
+           NAVEGAÇÃO (ABAS PRINCIPAIS)
+           ==================================================================== */
+        .header-nav {
+            background-color: var(--cor-principal);
+            color: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-nav h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .abas-principais {
+            display: flex;
+            background-color: #000000;
+        }
+
+        .abas-principais .aba {
+            padding: 12px 20px;
+            cursor: pointer;
+            border: none;
+            background-color: #1f1f1f;
+            color: var(--cor-secundaria);
+            font-size: 16px;
+            transition: background-color 0.3s, color 0.3s;
+            border-bottom: 3px solid transparent;
+        }
+
+        .abas-principais .aba:hover {
+            background-color: #333;
+        }
+
+        .abas-principais .aba.active {
+            background-color: var(--cor-fundo);
+            color: var(--cor-principal);
+            border-bottom-color: var(--cor-principal);
+        }
+        
+        /* ====================================================================
+           CONTEÚDO E UTILIDADES
+           ==================================================================== */
+        .conteudo-principal {
+            padding: 20px;
+            display: none; /* Controlado pelo JS */
+        }
+        .conteudo-principal.active {
+            display: block;
+        }
+
+        .info-vendedor {
+            background-color: #e6f7ff;
+            border: 1px solid #91d5ff;
+            color: #0050b3;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        /* ====================================================================
+           ESTILOS DE FORMULÁRIO GERAL
+           ==================================================================== */
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="email"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--cor-borda);
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+            font-weight: 600;
+        }
+
+        button:hover:not(:disabled) {
+            opacity: 0.9;
+        }
+        
+        button:disabled {
+            background-color: #d9d9d9;
+            color: #999;
+            cursor: not-allowed;
+        }
+        
+        .btn-primary {
+            background-color: var(--cor-principal);
+            color: white;
+        }
+        
+        .btn-secondary {
+            background-color: var(--cor-secundaria);
+            color: var(--cor-texto);
+            border: 1px solid var(--cor-borda);
+        }
+        
+        .btn-danger {
+            background-color: #ff4d4f;
+            color: white;
+        }
+
+        /* ====================================================================
+           LAYOUT DA ABA VENDAS
+           ==================================================================== */
+        .layout-vendas {
+            display: grid;
+            grid-template-columns: 2fr 1fr; /* Coluna de formulário e coluna de carrinho */
+            gap: 30px;
+        }
+
+        .secao-carrinho {
+            background-color: #f7f7f7;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid var(--cor-borda);
+        }
+
+        .secao-carrinho h3 {
+            margin-top: 0;
+            border-bottom: 2px solid var(--cor-borda);
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+
+        #listaCarrinho {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 20px;
+        }
+        
+        #listaCarrinho li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px dashed var(--cor-borda);
+        }
+        
+        #listaCarrinho li:last-child {
+            border-bottom: none;
+        }
+
+        .totais-venda div {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+            font-size: 16px;
+        }
+        .totais-venda strong {
+            font-size: 18px;
+            color: var(--cor-principal);
+        }
+
+        /* Autocomplete */
+        .autocomplete-container {
+            position: relative;
+        }
+        .autocomplete-list {
+            position: absolute;
+            background-color: white;
+            border: 1px solid var(--cor-borda);
+            z-index: 10;
+            max-height: 150px;
+            overflow-y: auto;
+            width: 100%;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .autocomplete-list li {
+            padding: 8px 10px;
+            cursor: pointer;
+        }
+        .autocomplete-list li:hover {
+            background-color: var(--cor-secundaria);
+        }
+        
+        /* ====================================================================
+           LAYOUT DA ABA CADASTROS
+           ==================================================================== */
+        .sub-abas {
+            display: flex;
+            border-bottom: 1px solid var(--cor-borda);
+            margin-bottom: 20px;
+        }
+        .sub-abas .sub-aba {
+            padding: 10px 15px;
+            cursor: pointer;
+            border: none;
+            background: none;
+            color: var(--cor-texto);
+            border-bottom: 3px solid transparent;
+            font-size: 14px;
+            transition: border-bottom 0.3s, color 0.3s;
+        }
+        .sub-abas .sub-aba.active {
+            color: var(--cor-principal);
+            border-bottom-color: var(--cor-principal);
+        }
+        
+        .layout-cadastro {
+            display: grid;
+            grid-template-columns: 1fr 2fr; /* Formulário e Tabela */
+            gap: 30px;
+        }
+        
+        .secao-tabela table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+        .secao-tabela th, .secao-tabela td {
+            padding: 12px;
+            border: 1px solid var(--cor-borda);
+            text-align: left;
+        }
+        .secao-tabela th {
+            background-color: #e6f6ff;
+            font-weight: 600;
+        }
+        .secao-tabela td button {
+            margin-right: 5px;
+        }
+        
+        /* Layout de Produto (para a aba Cadastros, se implementada) */
+        .layout-produto {
+             display: grid;
+             grid-template-columns: 1fr 1fr;
+             gap: 20px;
+        }
+        
+        /* Responsividade Básica */
+        @media (max-width: 900px) {
+            .layout-vendas, .layout-cadastro {
+                grid-template-columns: 1fr;
+            }
+        }
+        /* ====================================================================
+           FIM DO BLOCO DE ESTILOS
+           ==================================================================== */
+    </style>
 </head>
 <body>
+    <div class="container">
+        
+        <div class="header-nav">
+            <h1>Sistema Gerencial</h1>
+        </div>
+        <div class="abas-principais">
+            <button class="aba active" data-aba="vendas">Vendas</button>
+            <button class="aba" data-aba="cadastros">Cadastros</button>
+            <button class="aba" data-aba="relatorios">Relatórios</button>
+        </div>
 
-    <header>
-        <h1>Sistema de Vendas & Gestão</h1>
-    </header>
-
-    <nav>
-        <button class="tab-button active" onclick="showTab('vendas')">🛒 Tela de Vendas</button>
-        <button class="tab-button" onclick="showTab('gestao')">📈 Gestão/Relatórios</button>
-        <button class="tab-button" onclick="showTab('cadastros')">🗃️ Cadastros</button>
-    </nav>
-
-    <main>
-        <section id="vendas" class="tab-content active">
-            <h2>Tela de Vendas</h2>
-            <div id="vendedorInfo">Vendedor: <strong>Usuário Teste</strong> | Empresa(s): <strong>Carregando...</strong></div>
-
-            <h3>Cliente</h3>
-            <div class="campo-busca">
-                <label for="buscaCliente">Buscar Cliente (CPF/CNPJ ou Razão Social):</label>
-                <input type="text" id="buscaCliente" placeholder="Digite CPF/CNPJ ou nome..." autocomplete="off">
-                <div id="resultadoBusca" class="autocomplete-list"></div>
+        <div id="conteudo-vendas" class="conteudo-principal active">
+            <h2>Módulo de Vendas</h2>
+            
+            <div id="infoVendedor" class="info-vendedor">
+                Carregando informações do vendedor...
             </div>
             
-            <div id="clienteSelecionadoInfo">
-                <p>Cliente Selecionado: <strong id="clienteNomeDisplay">Nenhum</strong></p>
-                <input type="hidden" id="clienteIdVenda">
-            </div>
-
-            <hr>
-
-            <h3>Itens do Pedido</h3>
-            <div id="adicionarItemForm">
-                <label for="selectEmpresa">Empresa:</label>
-                <select id="selectEmpresa"></select>
+            <div class="layout-vendas">
                 
-                <label for="selectProduto">Produto:</label>
-                <select id="selectProduto"></select>
+                <div class="secao-vendas">
+                    <form id="formVenda">
+                        <h3>1. Dados do Cliente</h3>
+                        <div class="form-group autocomplete-container">
+                            <label for="inputCliente">Cliente (Razão Social):</label>
+                            <input type="text" id="inputCliente" required placeholder="Digite para buscar...">
+                            <input type="hidden" id="inputClienteId">
+                            <ul id="clienteSugestoes" class="autocomplete-list"></ul>
+                        </div>
+                        
+                        <h3>2. Adicionar Produto</h3>
+                        <div class="layout-produto">
+                            <div class="form-group autocomplete-container">
+                                <label for="inputProduto">Produto:</label>
+                                <input type="text" id="inputProduto" placeholder="Digite para buscar..." disabled>
+                                <input type="hidden" id="inputProdutoId">
+                                <input type="hidden" id="inputValorUnitarioBase">
+                                <ul id="produtoSugestoes" class="autocomplete-list"></ul>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="inputQuantidade">Quantidade:</label>
+                                <input type="number" id="inputQuantidade" value="1" min="1">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="inputDesconto">Desconto (%):</label>
+                                <input type="number" id="inputDesconto" value="0.00" min="0" max="100">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>&nbsp;</label>
+                                <button type="button" id="btnAdicionarProduto" class="btn-secondary" disabled>
+                                    Adicionar ao Carrinho
+                                </button>
+                            </div>
+                        </div>
+
+                        <h3>3. Detalhes Finais</h3>
+                         <div class="form-group">
+                            <label for="inputFrete">Valor do Frete (R$):</label>
+                            <input type="number" id="inputFrete" value="0.00" min="0">
+                        </div>
+                        
+                        </form>
+                </div>
                 
-                <label for="inputQuantidade">Quantidade:</label>
-                <input type="number" id="inputQuantidade" min="1" value="1">
-                
-                <label for="inputValorUnitario">Valor Unitário:</label>
-                <input type="number" id="inputValorUnitario" step="0.01" readonly>
-                
-                <button type="button" onclick="adicionarItemAoCarrinho()">Adicionar Item</button>
-            </div>
+                <div class="secao-carrinho">
+                    <h3>Carrinho</h3>
+                    <ul id="listaCarrinho">
+                        <li>Carrinho vazio. Adicione um produto acima.</li>
+                    </ul>
 
-            <table id="carrinhoTabela">
-                <thead>
-                    <tr>
-                        <th>Produto</th>
-                        <th>Qtde</th>
-                        <th>Valor Unitário</th>
-                        <th>Subtotal</th>
-                        <th>Ação</th>
-                    </tr>
-                </thead>
-                <tbody id="carrinhoBody"></tbody>
-            </table>
-
-            <hr>
-            
-            <div id="totaisVenda">
-                <label for="inputFrete">Frete:</label>
-                <input type="number" id="inputFrete" step="0.01" value="0.00" onchange="calcularTotalVenda()"><br><br>
-                
-                <p>Subtotal: <strong id="subtotalDisplay">R$ 0,00</strong></p>
-                <p>Total da Venda: <strong id="totalVendaDisplay">R$ 0,00</strong></p>
-            </div>
-            
-            <div id="acoesVenda">
-                <button id="btnSalvarEdicao" style="display:none;">Salvar Edição</button>
-                <button id="btnCancelarEdicao" style="display:none;">Cancelar Edição</button>
-                <button id="btnEnviarVenda">Enviar Venda</button>
-                <button id="btnCancelarVenda">Cancelar</button>
-            </div>
-            
-            <div id="modalEnvio" style="display:none;" class="modal-envio">
-                <h4>Pedido N° <span id="vendaIdConfirmacao"></span> Enviado! Deseja enviar cópia para o Cliente?</h4>
-                <input type="checkbox" id="enviaWhatsAppCliente">
-                <label for="enviaWhatsAppCliente">WhatsApp</label>
-                <input type="checkbox" id="enviaEmailCliente">
-                <label for="enviaEmailCliente">Email</label>
-                <button onclick="enviarCopiaCliente()">Confirmar Envio</button>
-                <button onclick="fecharModalEnvio()">Fechar</button>
-                <p id="statusEnvioCliente"></p>
-            </div>
-
-            <p id="statusVendaMensagem"></p>
-        </section>
-
-        <section id="gestao" class="tab-content">
-            <h2>📈 Gestão e Relatórios de Vendas</h2>
-            
-            <div class="card">
-                <h3>💰 Total Geral Vendido</h3>
-                <p id="totalVendidoValor" class="valor-destaque">Carregando...</p>
-            </div>
-
-            <div class="card">
-                <h3>Vendas Recentes (Exemplo de CRUD)</h3>
-                <ul id="listaVendasRecentes"></ul>
-            </div>
-
-            <div class="card chart-container">
-                <h3>🥇 Vendedores Destaques (Total em R$)</h3>
-                <canvas id="quemMaisVendeuChart"></canvas>
-            </div>
-
-            <div class="card chart-container">
-                <h3>📦 Itens Mais Vendidos (em Quantidade)</h3>
-                <canvas id="itensMaisVendidosChart"></canvas>
-            </div>
-        </section>
-
-
-        <section id="cadastros" class="tab-content">
-            <h2>🗃️ Módulo de Cadastros</h2>
-            <div class="cadastros-container">
-                
-                <div class="cadastro-box">
-                    <h3>Cadastro de Vendedores</h3>
-                    <form id="formCadastroVendedor">
-                        <label for="nome">Nome:</label><input type="text" name="nome" id="nome" required>
-                        <label for="cpf_cnpj_vend">CPF/CNPJ:</label><input type="text" name="cpf_cnpj" id="cpf_cnpj_vend" required>
-                        <label for="endereco_vend">Endereço:</label><input type="text" name="endereco" id="endereco_vend">
-                        <label for="email">Email:</label><input type="email" name="email" id="email" required>
-                        <label for="telefone_vend">Telefone:</label><input type="tel" name="telefone" id="telefone_vend">
+                    <div class="totais-venda">
+                        <div>Subtotal: <span id="subtotalValor">R$ 0,00</span></div>
+                        <div>Frete: R$ <span id="freteValorDisplay">0,00</span></div>
                         <hr>
-                        <h3>Permissões (Empresa e Comissão)</h3>
-                        <div id="permissoesVendedor"></div>
-                        <button type="submit">Cadastrar Vendedor</button>
-                        <p id="statusVendedorMensagem"></p>
-                    </form>
+                        <div><strong>Total Geral:</strong> <strong id="totalGeralValor">R$ 0,00</strong></div>
+                    </div>
+                    
+                    <div style="margin-top: 20px;">
+                         <button type="submit" form="formVenda" class="btn-primary" style="width: 100%;">
+                            FINALIZAR VENDA
+                        </button>
+                    </div>
                 </div>
-                
-                <div class="cadastro-box">
-                    <h3>Cadastro de Empresas</h3>
-                    <form id="formCadastroEmpresa">
-                        <label for="empresaNome">Nome:</label><input type="text" name="nome" id="empresaNome" required>
-                        <label for="empresaCnpj">CNPJ:</label><input type="text" name="cnpj" id="empresaCnpj" required>
-                        <label for="empresaEndereco">Endereço:</label><input type="text" name="endereco" id="empresaEndereco">
-                        <label for="empresaTelefone">Telefone:</label><input type="tel" name="telefone" id="empresaTelefone">
-                        <label for="empresaEmail">Email:</label><input type="email" name="email" id="empresaEmail">
-                        <h4>Contato do Gestor</h4>
-                        <label for="gerenteNome">Nome Gestor:</label><input type="text" name="nome_gerente" id="gerenteNome">
-                        <label for="gerenteTelefone">Telefone Gestor:</label><input type="tel" name="tel_gerente" id="gerenteTelefone">
-                        <label for="gerenteEmail">Email Gestor:</label><input type="email" name="email_gerente" id="gerenteEmail">
-                        <h4>Classificação</h4>
-                        <input type="checkbox" name="is_industria" id="isIndustria"><label for="isIndustria">Indústria</label>
-                        <input type="checkbox" name="is_atacado" id="isAtacado"><label for="isAtacado">Atacado</label>
-                        <button type="submit">Salvar Empresa</button>
-                        <p id="statusEmpresaMensagem"></p>
-                    </form>
-                    <hr>
-                    <h4>Empresas Cadastradas</h4>
-                    <ul id="listaEmpresasCadastradas"></ul>
-                </div>
-                
-                <div class="cadastro-box">
-                    <h3>Cadastro de Clientes</h3>
-                    <form id="formCadastroClientes">
-                        <label for="clienteCpfCnpj">CPF / CNPJ:</label><input type="text" name="cpf_cnpj" id="clienteCpfCnpj" required placeholder="Apenas números">
-                        <label for="clienteRazaoSocial">Nome / Razão Social:</label><input type="text" name="razao_social" id="clienteRazaoSocial" required>
-                        <label for="clienteEndereco">Endereço:</label><input type="text" name="endereco" id="clienteEndereco">
-                        <label for="clienteEmail">Email:</label><input type="email" name="email" id="clienteEmail">
-                        <label for="clienteTelefone">Telefone:</label><input type="tel" name="telefone" id="clienteTelefone">
-                        <button type="submit">Salvar Cliente</button>
-                        <p id="statusClientesMensagem"></p>
-                    </form>
+            </div>
+        </div>
+
+        <div id="conteudo-cadastros" class="conteudo-principal">
+            <h2>Módulo de Cadastros</h2>
+            
+            <div class="sub-abas">
+                <button class="sub-aba active" data-alvo="clientes">Clientes</button>
+                <button class="sub-aba" data-alvo="empresas">Empresas</button>
+                <button class="sub-aba" data-alvo="vendedores">Vendedores</button>
+                <button class="sub-aba" data-alvo="produtos">Produtos</button>
+            </div>
+            
+            <div id="conteudo-clientes" class="conteudo-cadastro">
+                <div class="layout-cadastro">
+                    <div class="secao-formulario">
+                        <h3>Cadastro de Cliente</h3>
+                        <form id="formCliente">
+                            <input type="hidden" id="inputClienteId">
+                            <div class="form-group">
+                                <label for="inputClienteRazaoSocial">Razão Social:</label>
+                                <input type="text" id="inputClienteRazaoSocial" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputClienteCnpj">CNPJ:</label>
+                                <input type="text" id="inputClienteCnpj">
+                            </div>
+                            <button type="submit" class="btn-primary">Salvar Cliente</button>
+                        </form>
+                    </div>
+                    <div class="secao-tabela">
+                        <h3>Lista de Clientes</h3>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Razão Social</th>
+                                    <th>CNPJ</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="clientesLista">
+                                <tr><td colspan="3">Carregando clientes...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
-            <div id="modalCadastroProduto" class="produto-modal" style="display:none;">
-                <h3>Cadastro de Produtos para: <span id="produtoEmpresaNome"></span></h3>
-                <form id="formCadastroProduto">
-                    <input type="hidden" name="produto_empresa_id" id="produtoEmpresaId">
-                    <label for="produtoNome">Nome:</label><input type="text" name="nome" id="produtoNome" required>
-                    <label for="produtoDescricao">Descrição:</label><textarea name="descricao" id="produtoDescricao"></textarea>
-                    <label for="valorUnitario">Valor Unitário:</label><input type="number" step="0.01" min="0" name="valor_unitario" id="valorUnitario" required>
-                    <label for="valorCaixa">Valor da Caixa:</label><input type="number" step="0.01" min="0" name="valor_caixa" id="valorCaixa">
-                    <label for="descontoMaximo">Desconto Máximo (%):</label><input type="number" step="0.01" min="0" max="100" name="desconto_max_percentual" id="descontoMaximo">
-                    <label for="comissaoProduto">Comissão do Produto (%):</label><input type="number" step="0.01" min="0" max="100" name="comissao_produto_percentual" id="comissaoProduto">
-                    <button type="submit">Salvar Produto</button>
-                    <button type="button" onclick="fecharCadastroProduto()">Cancelar</button>
-                    <p id="statusProdutoMensagem"></p>
-                </form>
+            <div id="conteudo-empresas" class="conteudo-cadastro" style="display: none;">
+                <div class="layout-cadastro">
+                     <div class="secao-formulario">
+                        <h3>Cadastro de Empresa</h3>
+                        <form id="formEmpresa">
+                            <input type="hidden" id="inputEmpresaId">
+                            <div class="form-group">
+                                <label for="inputEmpresaNome">Nome:</label>
+                                <input type="text" id="inputEmpresaNome" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputEmpresaCnpj">CNPJ:</label>
+                                <input type="text" id="inputEmpresaCnpj">
+                            </div>
+                            <button type="submit" class="btn-primary">Salvar Empresa</button>
+                        </form>
+                    </div>
+                    <div class="secao-tabela">
+                        <h3>Lista de Empresas</h3>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Nome</th>
+                                    <th>CNPJ</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="empresasLista">
+                                <tr><td colspan="3">Carregando empresas...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
-        </section>
-    </main>
+            
+            <div id="conteudo-vendedores" class="conteudo-cadastro" style="display: none;">
+                <div class="layout-cadastro">
+                     <div class="secao-formulario">
+                        <h3>Associação Vendedor/Empresa</h3>
+                        <p>Use este formulário para associar o ID de teste a uma comissão e à empresa logada.</p>
+                        <form id="formVendedor">
+                            <div class="form-group">
+                                <label for="inputVendedorEmail">Email do Vendedor (Referência):</label>
+                                <input type="email" id="inputVendedorEmail" required placeholder="Será usado o ID de teste fixo">
+                            </div>
+                            <div class="form-group">
+                                <label for="inputVendedorComissao">Comissão (%):</label>
+                                <input type="number" id="inputVendedorComissao" min="0" max="100" required>
+                            </div>
+                            <button type="submit" class="btn-primary">Associar Vendedor à Empresa Atual</button>
+                        </form>
+                    </div>
+                    <div class="secao-tabela">
+                        <h3>Vendedores Associados</h3>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Vendedor ID (Ref)</th>
+                                    <th>Email</th>
+                                    <th>Comissão (%)</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="vendedoresLista">
+                                <tr><td colspan="4">Carregando associações...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="conteudo-produtos" class="conteudo-cadastro" style="display: none;">
+                 <div class="layout-cadastro">
+                     <div class="secao-formulario">
+                        <h3>Cadastro de Produto</h3>
+                        <p>Os produtos são criados para a Empresa Logada.</p>
+                        <form id="formProduto">
+                            <input type="hidden" id="inputProdutoCadastroId">
+                            <div class="form-group">
+                                <label for="inputProdutoCadastroNome">Nome:</label>
+                                <input type="text" id="inputProdutoCadastroNome" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputProdutoCadastroValor">Valor Unitário (R$):</label>
+                                <input type="number" id="inputProdutoCadastroValor" min="0" step="0.01" required>
+                            </div>
+                            <button type="submit" class="btn-primary">Salvar Produto</button>
+                        </form>
+                    </div>
+                    <div class="secao-tabela">
+                        <h3>Produtos da Empresa</h3>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Nome</th>
+                                    <th>Valor Unitário</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="produtosLista">
+                                <tr><td colspan="3">Carregando produtos...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
 
-    <script src="app.js"></script>
-</body>
+        </div>
+
+        <div id="conteudo-relatorios" class="conteudo-principal">
+            <h2>Módulo de Relatórios</h2>
+            <p>Em desenvolvimento...</p>
+        </div>
+    </div>
+    
+    <script type="module" src="js/main.js"></script>
+    <script type="module" src="js/vendas.js"></script>
+    <script type="module" src="js/cadastros.js"></script>
+    <script type="module" src="js/relatorios.js"></script> </body>
 </html>
